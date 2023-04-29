@@ -1,6 +1,12 @@
 <?php
     include '../model/database.php';
-
+    session_start();
+    $accountExist = False;
+    $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
+    if($pageWasRefreshed==1) {
+        $accountExist = False;
+        session_destroy();
+    }
     if (isset($_POST['fullNameInput']) && isset($_POST['phoneNumberInput']) && isset($_POST['mailInput']) && isset($_POST['passwordInput']) && isset($_POST['addressInput'])) {
         $fullName = $_POST['fullNameInput'];
         $phoneNumber = $_POST['phoneNumberInput'];
@@ -10,14 +16,22 @@
         $acctype = 2;
         $status = 1;
         if (isset($_POST['regist-btn'])) {
-            $sql = "INSERT INTO `tb_akun`(`nama_lengkap`, `no_hp`, `email`, `password`, `alamat`, `fk_id_tipe_akun`, `status`) VALUES ('$fullName','$phoneNumber','$email','$password','$address','$acctype','$status')";
-            $result = mysqli_query($db_conn, $sql);
-            if ($result) {
-                echo "<script>alert('New record created successfully')</script>";
-                header("Location: dashboard.php");
-            } 
+            $check = "SELECT email FROM `tb_akun` WHERE email LIKE '%$email%'";
+            $countercheck = mysqli_query($db_conn, $check);
+            if ($countercheck->num_rows > 0) {
+                // echo "<script>alert('Data sudah ada! Silahkan login!')</script>";
+                $accountExist = True;
+            }
             else {
-                echo "<script>alert('$sql')</script>";
+                $sql = "INSERT INTO `tb_akun`(`nama_lengkap`, `no_hp`, `email`, `password`, `alamat`, `fk_id_tipe_akun`, `status`) VALUES ('$fullName','$phoneNumber','$email','$password','$address','$acctype','$status')";
+                $result = mysqli_query($db_conn, $sql);
+                if ($result) {
+                    echo "<script>alert('Berhasil mendaftar!')</script>";
+                    header("Location: dashboard.php");
+                } 
+                else {
+                    echo "<script>alert('$sql')</script>";
+                }
             }
         }
     }
@@ -41,19 +55,19 @@
                     <form action="./register.php" method="POST">
                         <div class="form-group">
                             <label for="fullNameInput" class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" name="fullNameInput" placeholder="cth: Arcueid Brunestud">
+                            <input type="text" class="form-control" name="fullNameInput" placeholder="cth: Arcueid Brunestud" required>
                         </div>
                         <div class="form-group">
                             <label for="phoneNumberInput" class="form-label">Nomor Handphone</label>
-                            <input type="number" class="form-control" name="phoneNumberInput" placeholder="cth: 62xxxxxxxxxxx">
+                            <input type="number" class="form-control" name="phoneNumberInput" placeholder="cth: 62xxxxxxxxxxx" required>
                         </div>
                         <div class="form-group">
                             <label for="mailInput" class="form-label">Alamat email</label>
-                            <input type="email" class="form-control" name="mailInput" aria-describedby="emailHelp" placeholder="cth: arcueidbrune@stud.com">
+                            <input type="email" class="form-control" name="mailInput" aria-describedby="emailHelp" placeholder="cth: arcueidbrune@stud.com" required>
                         </div>
                         <div class="form-group">
                             <label for="passwordInput" class="form-label">Password</label>
-                            <input type="password" class="form-control" name="passwordInput" placeholder="cth: arc2512">
+                            <input type="password" class="form-control" name="passwordInput" placeholder="cth: arc2512" required>
                         </div>
                         <!-- <div class="form-group">
                             <label for="confirmPasswordInput" class="form-label">Konfirmasi password</label>
@@ -61,11 +75,27 @@
                         </div> -->
                         <div class="form-group">
                             <label for="addressInput" class="form-label">Alamat</label>
-                            <input type="search" class="form-control" name="addressInput" placeholder="cth: Jl. Crimson Moon No. 25 Blok 12">
+                            <input type="search" class="form-control" name="addressInput" placeholder="cth: Jl. Crimson Moon No. 25 Blok 12" required>
                         </div>
-                        <button type="submit" class="btn form-button btn-success" name="regist-btn">Daftar</button>
+                            <button type="submit" class="btn form-button btn-success" name="regist-btn">Daftar</button>
                         <div>
                             <span class="ask">Sudah punya akun? <a href="./login.php">Masuk</a> sekarang juga!</span>
+                        </div>
+                        <div class="mt-2">
+                            <?php
+                                // $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
+
+                                // if($pageWasRefreshed) {
+                                //     $accountExist = False;
+                                // } 
+                                // else {
+                                    if ($accountExist == True) {
+                                        echo "<span class=\"warning\" style=\"color: white;\">Akun sudah ada, Silahkan login!</span>";
+                                    } else if ($accountExist == False) {
+                                        echo "<span class=\"warning\" style=\"color: white;\"></span>";
+                                    }
+                                // }
+                            ?>
                         </div>
                     </form>
                 </div>

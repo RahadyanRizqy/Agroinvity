@@ -1,5 +1,11 @@
 <?php
     include '../model/database.php';
+    session_start();
+    $accountExist = True;
+    $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
+    if($pageWasRefreshed==1) {
+        $accountExist = True;
+    }
     // $query = mysqli_query($db_conn, 'SELECT COUNT(*) FROM `tb_akun` WHERE email = "arcueid@gmail.com" and password = "brunestud";');
     
     // while ($result = mysqli_fetch_assoc($query)) {
@@ -28,10 +34,16 @@
             $result = mysqli_query($db_conn, $sql);
             if ($result->num_rows > 0) {
                 $row = mysqli_fetch_assoc($result);
+                $emailResult = $row['email'];
+                // $uservar = "SELECT * FROM tb_bahan_baku"
+                $_SESSION['workerelated'] = $pegawaiDetected;
+                $_SESSION['accrelated'] = $emailResult;
+                // echo "<script>alert('$emailResult')</script>";
                 header("Location: dashboard.php");
             } 
             else {
-                echo "<script>alert('Email atau password Anda salah. Silahkan coba lagi!')</script>";
+                // echo "<script>alert('Email atau password Anda salah. Silahkan coba lagi!')</script>";
+                $accountExist = False;
             }
         }
     }
@@ -73,6 +85,22 @@
                             <button type="submit" class="btn form-button btn-success" name="login-btn">Masuk</button>
                         <div>
                             <span class="ask">Belum punya akun? <a href="./register.php">Daftar</a> sekarang juga!</span>
+                        </div>
+                        <div class="mt-2">
+                            <?php
+                                // $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
+
+                                // if($pageWasRefreshed) {
+                                //     $accountExist = False;
+                                // } 
+                                // else {
+                                    if ($accountExist == False) {
+                                        echo "<span class=\"warning\" style=\"color: white;\">Akun tidak ditemukan, Silahkan daftar!</span>";
+                                    } else if ($accountExist == True) {
+                                        echo "<span class=\"warning\" style=\"color: white;\"></span>";
+                                    }
+                                // }
+                            ?>
                         </div>
                     </form>
                 </div>

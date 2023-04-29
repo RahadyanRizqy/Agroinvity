@@ -1,6 +1,14 @@
 <?php
   include '../model/database.php';
-  $query = mysqli_query($db_conn, 'SELECT * FROM tb_bahan_baku');
+  session_start();
+  $emailRelated = $_SESSION['accrelated'];
+  $pegawaiDetected = $_SESSION['workerelated'];
+  $query = null;
+  if ($emailRelated == 'superadmin@ms.net') {
+    $query = mysqli_query($db_conn, "SELECT id_bahan_baku, nama, jumlah, harga, waktu_input FROM `tb_bahan_baku`;");
+  } else {
+    $query = mysqli_query($db_conn, "SELECT bb.id_bahan_baku, bb.nama, bb.jumlah, bb.harga, bb.waktu_input FROM `tb_bahan_baku` bb INNER JOIN `tb_akun` a ON bb.fk_user = a.id_akun WHERE a.email = '$emailRelated';");
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +17,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 	<style>
 		body {
       margin: 0;
