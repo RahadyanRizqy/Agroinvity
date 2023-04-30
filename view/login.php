@@ -53,6 +53,7 @@
                 // $_SESSION['workerRelated'] = $accType;
                 $_SESSION['emailRelated'] = $emailRelated;
                 $_SESSION['accType'] = $accType;
+                $_SESSION['loggedin'] = true;
                 // echo "<script>alert('$emailResult')</script>";
                 header("Location: dashboard.php");
             } 

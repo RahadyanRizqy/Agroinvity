@@ -2,10 +2,29 @@
   include '../model/database.php';
   session_start();
   ob_start();
-  $emailRelated = $_SESSION['emailRelated'];
-  if (is_null(var_dump($emailRelated))) {
-    header("Location: ./forbidden.php");
-  };
+  error_reporting(0);
+  // $emailRelated = null;
+  // if ($emailRelated == null) {
+  //   header("Location: ./forbidden.php");
+  // }
+  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    // user is not logged in, redirect to login page
+    header("location: ./forbidden.php");
+    exit;
+  }
+
+  // try {
+  //   $emailRelated = $_SESSION['emailRelated'];
+  //   echo $emailRelated;
+  // } catch (Exception $e) {
+  //     echo $e;
+  //     header('Location: ./forbidden.php');
+  // }
+  // if (!(var_dump($emailRelated)) == NULL) {
+  //   header("Location: ./forbidden.php");
+  // } else {
+
+  // }
   $accType = $_SESSION['accType'];
   // $pegawaiDetected = $_SESSION['workerelated'];
   // $accType = $_SESSION['acctype'];
@@ -14,8 +33,10 @@
   if ($accType == 1) {
     $query = mysqli_query($db_conn, "SELECT b.id_bahan_baku, b.nama, b.jumlah, b.harga, b.waktu_input, a.nama_lengkap FROM tb_bahan_baku b, tb_akun a WHERE b.fk_user = a.id_akun;");
   } else if ($accType == 2) {
-    $query = mysqli_query($db_conn, "SELECT bb.id_bahan_baku, bb.nama, bb.jumlah, bb.harga, bb.waktu_input FROM `tb_bahan_baku` bb INNER JOIN `tb_akun` a ON bb.fk_user = a.id_akun WHERE a.email = '$emailRelated';");
+    $emailRelated = $_SESSION['emailRelated'];
+    $query = mysqli_query($db_conn, "SELECT b.id_bahan_baku, b.nama, b.jumlah, b.harga, b.waktu_input FROM `tb_bahan_baku` b INNER JOIN `tb_akun` a ON b.fk_user = a.id_akun WHERE a.email = '$emailRelated';");
   } else if ($accType == 3) {
+    $emailRelated = $_SESSION['emailRelated'];
     $query = mysqli_query($db_conn, "SELECT b.id_bahan_baku, b.nama, b.jumlah, b.harga, b.waktu_input, a.nama_lengkap FROM tb_bahan_baku b, tb_akun a WHERE b.fk_user = a.id_akun AND a.id_akun = (SELECT a.id_akun FROM tb_akun a, tb_akun b WHERE b.fk_id_rel_akun = a.id_akun AND b.email = '$emailRelated');");
     $workerRelatedPartner = mysqli_query($db_conn, "SELECT b.email, a.email FROM tb_akun a, tb_akun b WHERE b.fk_id_rel_akun = a.id_akun AND b.email = '$emailRelated';");
   }
@@ -330,7 +351,7 @@
               $stuffPrice = $_POST['priceInput'];
             }
             if (isset($_POST['save-btn'])) {
-
+              // DRAFT
             }
           ?>
           <div class="crud-table">

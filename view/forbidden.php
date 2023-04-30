@@ -1,3 +1,17 @@
+<!-- <?php
+    session_start();
+    ob_start();
+    error_reporting(0);
+    try {
+        (var_dump($_SESSION['emailRelated']) == NULL);
+    } catch (Exception $e) {
+        if (is_null($e) == 1) {
+            header("Location: ./homepage.php");
+        }
+    }
+
+?> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

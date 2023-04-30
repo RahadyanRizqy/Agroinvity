@@ -1,6 +1,7 @@
 <?php
     include '../model/database.php';
     session_start();
+    ob_start();
     $accountExist = False;
     $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
     if($pageWasRefreshed==1) {
@@ -26,6 +27,7 @@
                 $sql = "INSERT INTO `tb_akun`(`nama_lengkap`, `no_hp`, `email`, `password`, `alamat`, `fk_id_tipe_akun`, `status`) VALUES ('$fullName','$phoneNumber','$email','$password','$address','$acctype','$status')";
                 $result = mysqli_query($db_conn, $sql);
                 if ($result) {
+                    $_SESSION['emailRelated'] = $email;
                     echo "<script>alert('Berhasil mendaftar!')</script>";
                     header("Location: dashboard.php");
                 } 
