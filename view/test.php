@@ -7,9 +7,17 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="./test.php" method="post">
-        <label for="input-one">Enter your name:</label>
-        <input type="text" name="input-one" id="input-one">
+    <?php
+    $attnum = 0;
+    ?>
+
+    <form method='post'>
+    <button type="button" onClick="funct('<?php $attnum++ ?>')">+</button>
+    <h3><em>att<?php echo "$attnum" ?>: </em></h3>
+    </form>
+    <!-- <form action="./test.php" method="post">
+        <!-- <label for="input-one">Enter your name:</label>
+        <input type="text" name="input-one" id="input-one"> -->
         <!-- <label for="input-two">Enter your pass:</label>
         <input type="text" name="input-two" id="input-two"> -->
         <!-- <?php
@@ -19,8 +27,8 @@
             }
         }
         ?> -->
-    </form>
-    <script>
+    </form> -->
+    <!-- <script>
         var inputone = document.getElementById("input-one");
         inputone.addEventListener("input", function() {
             if (this.value === "Raden") {
@@ -38,6 +46,6 @@
         //         this.setCustomValidity("");
         //     }
         // });
-    </script>
+    </script> -->
 </body>
 </html>

@@ -1,6 +1,7 @@
 <?php
     include '../model/database.php';
     session_start();
+    ob_start();
     $accountExist = True;
     $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
     if($pageWasRefreshed==1) {
@@ -34,10 +35,24 @@
             $result = mysqli_query($db_conn, $sql);
             if ($result->num_rows > 0) {
                 $row = mysqli_fetch_assoc($result);
-                $emailResult = $row['email'];
-                // $uservar = "SELECT * FROM tb_bahan_baku"
-                $_SESSION['workerelated'] = $pegawaiDetected;
-                $_SESSION['accrelated'] = $emailResult;
+                
+                $emailRelated = $row['email'];
+                $accType = $row['fk_id_tipe_akun'];
+                
+                // $superadminDetected = false;
+                // $workerDetected = false;
+                // $partnerDetected = false;
+                
+                // if ($accType == 2) { # Partner
+                //     $workerDetected = true;
+                // }
+                // else if ($accType == 3) { # Worker
+                //     $partnerDetected = true;
+                // }
+
+                // $_SESSION['workerRelated'] = $accType;
+                $_SESSION['emailRelated'] = $emailRelated;
+                $_SESSION['accType'] = $accType;
                 // echo "<script>alert('$emailResult')</script>";
                 header("Location: dashboard.php");
             } 

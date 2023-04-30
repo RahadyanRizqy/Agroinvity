@@ -1,13 +1,20 @@
 <?php
   include '../model/database.php';
   session_start();
-  $emailRelated = $_SESSION['accrelated'];
-  $pegawaiDetected = $_SESSION['workerelated'];
+  ob_start();
+  $emailRelated = $_SESSION['emailRelated'];
+  $accType = $_SESSION['accType'];
+  // $pegawaiDetected = $_SESSION['workerelated'];
+  // $accType = $_SESSION['acctype'];
   $query = null;
-  if ($emailRelated == 'superadmin@ms.net') {
-    $query = mysqli_query($db_conn, "SELECT id_bahan_baku, nama, jumlah, harga, waktu_input FROM `tb_bahan_baku`;");
-  } else {
+  $workerRelatedPartner = null;
+  if ($accType == 1) {
+    $query = mysqli_query($db_conn, "SELECT b.id_bahan_baku, b.nama, b.jumlah, b.harga, b.waktu_input, a.nama_lengkap FROM tb_bahan_baku b, tb_akun a WHERE b.fk_user = a.id_akun;");
+  } else if ($accType == 2) {
     $query = mysqli_query($db_conn, "SELECT bb.id_bahan_baku, bb.nama, bb.jumlah, bb.harga, bb.waktu_input FROM `tb_bahan_baku` bb INNER JOIN `tb_akun` a ON bb.fk_user = a.id_akun WHERE a.email = '$emailRelated';");
+  } else if ($accType == 3) {
+    $query = mysqli_query($db_conn, "SELECT b.id_bahan_baku, b.nama, b.jumlah, b.harga, b.waktu_input, a.nama_lengkap FROM tb_bahan_baku b, tb_akun a WHERE b.fk_user = a.id_akun AND a.id_akun = (SELECT a.id_akun FROM tb_akun a, tb_akun b WHERE b.fk_id_rel_akun = a.id_akun AND b.email = '$emailRelated');");
+    $workerRelatedPartner = mysqli_query($db_conn, "SELECT b.email, a.email FROM tb_akun a, tb_akun b WHERE b.fk_id_rel_akun = a.id_akun AND b.email = '$emailRelated';");
   }
 ?>
 <!DOCTYPE html>
@@ -174,6 +181,37 @@
         display: none;
       }
     } */
+    /* label {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      text-align: right;
+      width: 400px;
+      line-height: 26px;
+      margin-bottom: 10px;
+    }
+
+    input {
+      flex: 0 0 200px;
+      margin-left: 20px;
+    } */
+    /* form.modify-table {
+      border-collapse: separate;
+      border-spacing: 0 15px;
+    }
+
+    form.modify-table > tbody > tr ,
+    form.modify-table > tbody > tr > td {
+      width: 150px;
+      border: 1px;
+      padding: 5px;
+    } */
+
+    /* .form-group {
+      display: flex;
+      margin-bottom: 10px;
+    } */
+
 	</style>
 	<!-- Montserrat Font -->
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -190,9 +228,9 @@
 			<span class="material-icons-outlined">menu</span>
 		  </div>
 		  <div class="header-right">
-			<span class="material-icons-outlined">notifications</span>
-			<span class="material-icons-outlined">email</span>
-			<span class="material-icons-outlined">account_circle</span>
+			<!-- <span class="material-icons-outlined">notifications</span>
+			<span class="material-icons-outlined">email</span> -->
+			<span class="acc-icon material-icons-outlined">account_circle</span>
 		  </div>
 		</header>
 		<!-- End Header -->
@@ -222,21 +260,82 @@
 		<!-- End Sidebar -->
   
 		<!-- Main -->
-		<main class="main-container">
+		<main class="main-container ">
 		  <div class="main-title">
 			<h2>Pendataan</h2>
 		  </div>
-          <div class="add-button mt-5">
-                <button class="btn btn-success">
-                    Tambah
-                </button>
-            </div>
-          <div class="crud-table">
-          <div class="form-add">
-
+          <div class="rel-email">
+            <p><?php
+              if ($accType == 3) {
+                $result = mysqli_fetch_row($workerRelatedPartner);
+                echo "Mitra: " . $result[0] . "<br>";
+                echo "Pegawai: " . $result[1] . "<br>";
+              } else {
+                echo "Mitra " . $emailRelated . "<br>";
+              }
+            ?></p>
           </div>
-          <table class="table table-bordered mt-5">
+          <div class="add-button mt-3">
+            <button type="submit" class="btn btn-success" name="add-btn" id="add-btn" onclick="btnLogic()">Tambah</button>
+            <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
+          </div>
+          <!-- CRUD FORM -->
+          <div class="form-add mt-3" style="display: none;" id="crud-form">
+            <form action="" method="post">
+              <table class="modify-table">
+                  <tbody>
+                    <tr>
+                      <td><label for="stuffInput" class="label-control">Nama: </label></td>
+                      <td><input type="text" class="form-control" name="stuffInput"></td>
+                    </tr>
+                    <tr>
+                      <td><label for="qtyInput" class="label-control">Jumlah: </label></td>
+                      <td><input type="text" class="form-control" name="qtyInput"></td>
+                    </tr>
+                    <tr>
+                      <td><label for="priceInput" class="label-control">Harga: </label></td>
+                      <td><input type="text" class="form-control" name="priceInput"></td>
+                    </tr>
+                </tbody>
+              </table>
+            </form>
+            <div class="add-button mt-3" id="cancel-save">
+              <button type="submit" class="btn btn-danger" name="cancel-btn" id="cancel-btn" onclick="btnLogic()">Batal</button>
+              <button type="submit" class="btn btn-primary" name="save-btn" id="save-btn" onclick="btnLogic()">Simpan</button>
+            <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
+            </div>
+          </div>
+          <script type="text/javascript">
+            document.getElementById("crud-form").style.display = "none";
+            var capnum = 0;
+            function btnLogic(){
+                capnum++;
+                // document.getElementById('display').innerHTML = capnum;
+                if (capnum % 2 == 1) {
+                  document.getElementById("crud-form").style.display = "block";
+                  document.getElementById("add-btn").style.display = "none";
+                } else {
+                  document.getElementById("crud-form").style.display = "none";
+                  document.getElementById("add-btn").style.display = "block";
+                }
+            }
+          </script>
+          <?php
+            if (isset($_POST['stuffInput']) && (isset($_POST['qtyInput']) && (isset($_POST['priceInput'])))) {
+              $stuffName = $_POST['stuffInput'];
+              $stuffQty = $_POST['qtyInput'];
+              $stuffPrice = $_POST['priceInput'];
+            }
+            if (isset($_POST['save-btn'])) {
+
+            }
+          ?>
+          <div class="crud-table">
+          <table class="table table-bordered mt-3">
             <thead>
+              <?php
+                if ($accType == 1) {
+              ?>
                 <tr>
                 <th scope="col">No</th>
                 <th scope="col">ID Bahan Baku</th>
@@ -244,10 +343,42 @@
                 <th scope="col">Jumlah</th>
                 <th scope="col">Harga</th>
                 <th scope="col">Tanggal Input</th>
+                <th scope="col">Pemilik</th>
+                <th scope="col">Ubah</th>
+                <th scope="col">Hapus</th>
                 </tr>
+              <?php
+                } else if ($accType == 2){
+              ?>
+                <tr>
+                <th scope="col">No</th>
+                <th scope="col">ID Bahan Baku</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Jumlah</th>
+                <th scope="col">Harga</th>
+                <th scope="col">Tanggal Input</th>
+                <th scope="col">Ubah</th>
+                <th scope="col">Hapus</th>
+                </tr>
+              <?php
+                } else {
+              ?>
+                <tr>
+                <th scope="col">No</th>
+                <th scope="col">ID Bahan Baku</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Jumlah</th>
+                <th scope="col">Harga</th>
+                <th scope="col">Tanggal Input</th>
+                <th scope="col">Hapus</th>
+                </tr>                
+              <?php
+                }
+              ?>
             </thead>
             <tbody>
                 <?php
+                if ($accType == 1) {
                     $i = 0;
                     while ($result = mysqli_fetch_row($query)) {
                       $i++;
@@ -259,9 +390,45 @@
                   <td><?php echo $result[2] ?></td>
                   <td><?php echo $result[3] ?></td>
                   <td><?php echo $result[4] ?></td>
-                </tr>
-                <?php } ?>
-
+                  <td><?php echo $result[5] ?></td>
+                  <td><button class="btn btn-primary">Ubah</button></td>
+                  <td><button class="btn btn-danger">Hapus</button></td>
+                  </tr>
+                <?php } 
+                } else if ($accType == 2) {
+                  $i = 0;
+                  while ($result = mysqli_fetch_row($query)) {
+                    $i++;
+                ?>
+                  <tr>
+                  <th scope="row"><?php echo $i ?></th>
+                  <td><?php echo $result[0] ?></td>
+                  <td><?php echo $result[1] ?></td>
+                  <td><?php echo $result[2] ?></td>
+                  <td><?php echo $result[3] ?></td>
+                  <td><?php echo $result[4] ?></td>
+                  <td><button class="btn btn-primary">Ubah</button></td>
+                  <td><button class="btn btn-danger">Hapus</button></td>
+                  </tr>
+                <?php }
+                } else if ($accType == 3) {
+                  $i = 0;
+                  while ($result = mysqli_fetch_row($query)) {
+                    $i++;
+                  ?>
+                  <tr>
+                  <th scope="row"><?php echo $i ?></th>
+                  <td><?php echo $result[0] ?></td>
+                  <td><?php echo $result[1] ?></td>
+                  <td><?php echo $result[2] ?></td>
+                  <td><?php echo $result[3] ?></td>
+                  <td><?php echo $result[4] ?></td>
+                  <td><button class="btn btn-primary">Ubah</button></td>
+                  </tr>
+                <?php
+                  }
+                } 
+                ?>
                 <!-- <tr>
                 <th scope="row">1</th>
                 <td>2</td>
@@ -272,6 +439,13 @@
             </tbody>
             </table>
           </div>
+          <form action="./dashboard.php" method="post">
+          <div class="temproal-logout-btn">
+            <button class="btn btn-dark" name="logout-btn">
+              Keluar
+            </button>
+          </div>
+          </form>
 		</main>
 		<!-- End Main -->
   
@@ -285,3 +459,9 @@
 	</body>
 </body>
 </html>
+<?php
+  if(isset($_POST['logout-btn'])) {
+    session_destroy();
+    header("Location: ./login.php");
+  }
+?>
