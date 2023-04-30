@@ -3,6 +3,9 @@
   session_start();
   ob_start();
   $emailRelated = $_SESSION['emailRelated'];
+  if (is_null(var_dump($emailRelated))) {
+    header("Location: ./forbidden.php");
+  };
   $accType = $_SESSION['accType'];
   // $pegawaiDetected = $_SESSION['workerelated'];
   // $accType = $_SESSION['acctype'];
