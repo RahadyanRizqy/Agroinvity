@@ -3,7 +3,6 @@
     ob_start();
     error_reporting(0);
     var_dump($_SESSION['loggedin']);
-    var_dump($_SESSION['email'])
 
 ?>
 

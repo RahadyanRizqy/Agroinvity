@@ -8,6 +8,7 @@
         $accountExist = False;
         session_destroy();
     }
+
     if (isset($_POST['fullNameInput']) && isset($_POST['phoneNumberInput']) && isset($_POST['mailInput']) && isset($_POST['passwordInput']) && isset($_POST['addressInput'])) {
         $fullName = $_POST['fullNameInput'];
         $phoneNumber = $_POST['phoneNumberInput'];
@@ -27,14 +28,32 @@
                 $sql = "INSERT INTO `tb_akun`(`nama_lengkap`, `no_hp`, `email`, `password`, `alamat`, `fk_id_tipe_akun`, `status`) VALUES ('$fullName','$phoneNumber','$email','$password','$address','$acctype','$status')";
                 $result = mysqli_query($db_conn, $sql);
                 if ($result) {
-                    $_SESSION['emailRelated'] = $email;
-                    echo "<script>alert('Berhasil mendaftar!')</script>";
-                    header("Location: dashboard.php");
+                    $sql = "SELECT * FROM tb_akun WHERE email='$email' AND password='$password'";
+                    $result = mysqli_query($db_conn, $sql);
+                    
+                    if ($result->num_rows > 0) {
+                        // $superadminDetected = false;
+                        // $workerDetected = false;
+                        // $partnerDetected = false;
+                        
+                        // if ($accType == 2) { # Partner
+                        //     $workerDetected = true;
+                        // }
+                        // else if ($accType == 3) { # Worker
+                        //     $partnerDetected = true;
+                        // }
+
+                        // $_SESSION['workerRelated'] = $accType;
+                        $_SESSION['loggedin'] = true;
+                        $_SESSION['email'] = $email;
+                        // echo "<script>alert('$emailResult')</script>";
+                        header("Location: dashboard.php");
                 } 
                 else {
                     echo "<script>alert('$sql')</script>";
                 }
             }
+        }
         }
     }
 ?>

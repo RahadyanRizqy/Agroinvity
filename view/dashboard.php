@@ -7,11 +7,11 @@
   // if ($emailRelated == null) {
   //   header("Location: ./forbidden.php");
   // }
-  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    // user is not logged in, redirect to login page
-    header("location: ./forbidden.php");
-    exit;
-  }
+  // if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+  //   // user is not logged in, redirect to login page
+  //   header("location: ./forbidden.php");
+  //   exit;
+  // }
 
   // try {
   //   $emailRelated = $_SESSION['emailRelated'];

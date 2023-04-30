@@ -33,6 +33,7 @@
         if (isset($_POST['login-btn'])) {         
             $sql = "SELECT * FROM tb_akun WHERE email='$email' AND password='$password'";
             $result = mysqli_query($db_conn, $sql);
+            // $_SESSION['loggedin'] = true;
             if ($result->num_rows > 0) {
                 $row = mysqli_fetch_assoc($result);
                 
@@ -53,7 +54,6 @@
                 // $_SESSION['workerRelated'] = $accType;
                 $_SESSION['emailRelated'] = $emailRelated;
                 $_SESSION['accType'] = $accType;
-                $_SESSION['loggedin'] = true;
                 // echo "<script>alert('$emailResult')</script>";
                 header("Location: dashboard.php");
             } 
@@ -111,7 +111,8 @@
                                 // } 
                                 // else {
                                     if ($accountExist == False) {
-                                        echo "<span class=\"warning\" style=\"color: white;\">Akun tidak ditemukan, Silahkan daftar!</span>";
+                                        echo "<span style=\"color: white;\">Akun tidak ditemukan / atau salah password!</span>" . "<br>";
+                                        echo "<span style=\"color: white;\">atau, Silahkan daftar / hubungi kontak di homepage!</span>" . "<br>";
                                     } else if ($accountExist == True) {
                                         echo "<span class=\"warning\" style=\"color: white;\"></span>";
                                     }
