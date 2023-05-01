@@ -112,7 +112,7 @@
                                 // else {
                                     if ($accountExist == False) {
                                         echo "<span style=\"color: white;\">Akun tidak ditemukan / atau salah password!</span>" . "<br>";
-                                        echo "<span style=\"color: white;\">atau, Silahkan daftar / hubungi kontak di homepage!</span>" . "<br>";
+                                        echo "<span style=\"color: white;\">Silahkan daftar / hubungi kontak di homepage!</span>" . "<br>";
                                     } else if ($accountExist == True) {
                                         echo "<span class=\"warning\" style=\"color: white;\"></span>";
                                     }

@@ -3,7 +3,10 @@
   session_start();
   ob_start();
   error_reporting(0);
-  // $emailRelated = null;
+  $emailRelated = null;
+  $stuffName = "";
+  $stuffQty = "";
+  $stuffPrice = "";
   // if ($emailRelated == null) {
   //   header("Location: ./forbidden.php");
   // }
@@ -31,6 +34,7 @@
   $query = null;
   $workerRelatedPartner = null;
   if ($accType == 1) {
+    $emailRelated = $_SESSION['emailRelated'];
     $query = mysqli_query($db_conn, "SELECT b.id_bahan_baku, b.nama, b.jumlah, b.harga, b.waktu_input, a.nama_lengkap FROM tb_bahan_baku b, tb_akun a WHERE b.fk_user = a.id_akun;");
   } else if ($accType == 2) {
     $emailRelated = $_SESSION['emailRelated'];
@@ -271,12 +275,17 @@
 		  <ul class="sidebar-list">
 			<li class="sidebar-list-item">
 			  <a href="#" target="_blank">
-				<span class="material-icons-outlined">dashboard</span> Pendataan
+				<span class="material-icons-outlined"></span> Bahan Baku
 			  </a>
 			</li>
 			<li class="sidebar-list-item">
 			  <a href="#" target="_blank">
-				<span class="material-icons-outlined">inventory_2</span> Detail
+				<span class="material-icons-outlined"></span> Produksi
+			  </a>
+			</li>
+      <li class="sidebar-list-item">
+			  <a href="#" target="_blank">
+				<span class="material-icons-outlined"></span> Operasional
 			  </a>
 			</li>
 		  </ul>
@@ -292,10 +301,12 @@
             <p><?php
               if ($accType == 3) {
                 $result = mysqli_fetch_row($workerRelatedPartner);
-                echo "Mitra: " . $result[0] . "<br>";
-                echo "Pegawai: " . $result[1] . "<br>";
+                echo "Mitra: " . $result[1] . "<br>";
+                echo "Pegawai: " . $result[0] . "<br>";
+              } else if ($accType == 2) {
+                echo "Mitra: " . $emailRelated . "<br>";
               } else {
-                echo "Mitra " . $emailRelated . "<br>";
+                echo "Admin: " . $emailRelated . "<br>";
               }
             ?></p>
           </div>
@@ -310,24 +321,33 @@
                   <tbody>
                     <tr>
                       <td><label for="stuffInput" class="label-control">Nama: </label></td>
-                      <td><input type="text" class="form-control" name="stuffInput"></td>
+                      <td><input type="text" class="form-control" name="idNonInput" id="idNonInput" value="<?php echo $rowId; ?>"disabled></td>
+                    </tr>
+                    <tr>
+                      <td><label for="stuffInput" class="label-control">Nama: </label></td>
+                      <td><input type="text" class="form-control" name="stuffInput" value="<?php echo $stuffName; ?>" required></td>
                     </tr>
                     <tr>
                       <td><label for="qtyInput" class="label-control">Jumlah: </label></td>
-                      <td><input type="text" class="form-control" name="qtyInput"></td>
+                      <td><input type="text" class="form-control" name="qtyInput" value="<?php echo $stuffQty; ?>" required></td>
                     </tr>
                     <tr>
-                      <td><label for="priceInput" class="label-control">Harga: </label></td>
-                      <td><input type="text" class="form-control" name="priceInput"></td>
+                      <td><label for="priceInput" class="label-control">Harga Total: </label></td>
+                      <td><input type="text" class="form-control" name="priceInput" value="<?php echo $stuffQty; ?>" required></td>
                     </tr>
                 </tbody>
               </table>
             </form>
             <div class="add-button mt-3" id="cancel-save">
-              <button type="submit" class="btn btn-danger" name="cancel-btn" id="cancel-btn" onclick="btnLogic()">Batal</button>
-              <button type="submit" class="btn btn-primary" name="save-btn" id="save-btn" onclick="btnLogic()">Simpan</button>
+              <button type="submit" class="btn btn-danger cancel-btn" name="cancel-btn" id="cancel-btn" onclick="btnLogic()">Batal</button>
+              <button type="submit" class="btn btn-primary save-btn" name="save-btn" id="save-btn" onclick="btnLogic()">Simpan</button>
             <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
             </div>
+            <?php
+              if(isset($_POST['save-btn'])) {
+                echo "";
+              }
+            ?>
           </div>
           <script type="text/javascript">
             document.getElementById("crud-form").style.display = "none";
@@ -354,7 +374,19 @@
               // DRAFT
             }
           ?>
+          <?php
+            if (isset($_POST['change-btn'])) {
+              $rowId = $_POST['data-id'];
+              $_SESSION['rowId'] = $rowId;
+              echo "$rowId";
+            }
+            if (isset($_GET['delete'])) {
+              $rowId = $_GET['delete'];
+              
+            }       
+            ?>
           <div class="crud-table">
+          <form action="./dashboard.php" method="POST">
           <table class="table table-bordered mt-3">
             <thead>
               <?php
@@ -365,8 +397,8 @@
                 <th scope="col">ID Bahan Baku</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Jumlah</th>
-                <th scope="col">Harga</th>
-                <th scope="col">Tanggal Input</th>
+                <th scope="col">Harga Total</th>
+                <th scope="col">Tanggal dan Waktu Input</th>
                 <th scope="col">Pemilik</th>
                 <th scope="col">Ubah</th>
                 <th scope="col">Hapus</th>
@@ -380,7 +412,7 @@
                 <th scope="col">Nama</th>
                 <th scope="col">Jumlah</th>
                 <th scope="col">Harga</th>
-                <th scope="col">Tanggal Input</th>
+                <th scope="col">Tanggal dan Waktu Input</th>
                 <th scope="col">Ubah</th>
                 <th scope="col">Hapus</th>
                 </tr>
@@ -393,7 +425,7 @@
                 <th scope="col">Nama</th>
                 <th scope="col">Jumlah</th>
                 <th scope="col">Harga</th>
-                <th scope="col">Tanggal Input</th>
+                <th scope="col">Tanggal dan Waktu Input</th>
                 <th scope="col">Hapus</th>
                 </tr>                
               <?php
@@ -408,15 +440,23 @@
                       $i++;
                 ?>
                   <tr>
-                  <th scope="row"><?php echo $i ?></th>
-                  <td><?php echo $result[0] ?></td>
-                  <td><?php echo $result[1] ?></td>
-                  <td><?php echo $result[2] ?></td>
-                  <td><?php echo $result[3] ?></td>
-                  <td><?php echo $result[4] ?></td>
-                  <td><?php echo $result[5] ?></td>
-                  <td><button class="btn btn-primary">Ubah</button></td>
-                  <td><button class="btn btn-danger">Hapus</button></td>
+                    <th scope="row"><?php echo $i ?></th>
+                    <td><?php echo $result[0] ?></td>
+                    <td><?php echo $result[1] ?></td>
+                    <td><?php echo $result[2] ?></td>
+                    <td><?php echo $result[3] ?></td>
+                    <td><?php echo $result[4] ?></td>
+                    <td><?php echo $result[5] ?></td>
+                    <form action="./dashboard.php" method="post">
+                      <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                      <td> <input type="submit" id="change-btn" name="change-btn" class="btn btn-warning" value="Ubah"></td>
+                    </form>
+                    <form action="./dashboard.php" method="post">
+                      <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                      <td> <input type="submit" id="delete-btn" name="delete-btn" class="btn btn-danger" value="Hapus"></td>
+                    </form>
+                  <!-- <td><a href="dashboard.php?change=<?php echo $result[0]; ?>" type="button" class="btn btn-primary change-btn" name="change-btn">Ubah</a></td>
+                  <td><a href="dashboard.php?delete=<?php echo $result[0]; ?>" type="button" class="btn btn-danger delete-btn" name="delete-btn">Hapus</a></td> -->
                   </tr>
                 <?php } 
                 } else if ($accType == 2) {
@@ -425,14 +465,20 @@
                     $i++;
                 ?>
                   <tr>
-                  <th scope="row"><?php echo $i ?></th>
-                  <td><?php echo $result[0] ?></td>
-                  <td><?php echo $result[1] ?></td>
-                  <td><?php echo $result[2] ?></td>
-                  <td><?php echo $result[3] ?></td>
-                  <td><?php echo $result[4] ?></td>
-                  <td><button class="btn btn-primary">Ubah</button></td>
-                  <td><button class="btn btn-danger">Hapus</button></td>
+                    <th scope="row"><?php echo $i ?></th>
+                    <td><?php echo $result[0] ?></td>
+                    <td><?php echo $result[1] ?></td>
+                    <td><?php echo $result[2] ?></td>
+                    <td><?php echo $result[3] ?></td>
+                    <td><?php echo $result[4] ?></td>
+                    <form action="./dashboard.php" method="post">
+                      <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                      <td> <input type="submit" name="change-btn" class="btn btn-warning" value="Ubah"></td>
+                    </form>
+                    <form action="./dashboard.php" method="post">
+                      <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                      <td> <input type="submit" name="delete-btn" class="btn btn-danger" value="Hapus"></td>
+                    </form>
                   </tr>
                 <?php }
                 } else if ($accType == 3) {
@@ -441,27 +487,27 @@
                     $i++;
                   ?>
                   <tr>
-                  <th scope="row"><?php echo $i ?></th>
-                  <td><?php echo $result[0] ?></td>
-                  <td><?php echo $result[1] ?></td>
-                  <td><?php echo $result[2] ?></td>
-                  <td><?php echo $result[3] ?></td>
-                  <td><?php echo $result[4] ?></td>
-                  <td><button class="btn btn-primary">Ubah</button></td>
+                    <th scope="row"><?php echo $i ?></th>
+                    <td><?php echo $result[0] ?></td>
+                    <td><?php echo $result[1] ?></td>
+                    <td><?php echo $result[2] ?></td>
+                    <td><?php echo $result[3] ?></td>
+                    <td><?php echo $result[4] ?></td>
+                    <form action="./dashboard.php" method="post">
+                        <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                        <td> <input type="submit" name="change-btn" class="btn btn-warning" value="Ubah"></td>
+                    </form>
+                  <!-- <td><a href="dashboard.php?change=<?php echo $result[0]; ?>" type="button" class="btn btn-primary change-btn" name="change-btn">Ubah</a></td> -->
                   </tr>
                 <?php
+                    }
                   }
-                } 
                 ?>
-                <!-- <tr>
-                <th scope="row">1</th>
-                <td>2</td>
-                <td>Pupuk Bagus</td>
-                <td>3</td>
-                <td>2023-04-20 15:34:30</td>
-                </tr> -->
             </tbody>
             </table>
+          </form>
+          </div>
+          <div>
           </div>
           <form action="./dashboard.php" method="post">
           <div class="temproal-logout-btn">

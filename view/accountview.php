@@ -2,6 +2,7 @@
     session_start();
     ob_start();
     $emailRelated = $_SESSION['emailRelated'];
+    $query = "SELECT * "
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +56,7 @@
     <div class="content">
         <div class="form-container">
             <div class="edit-form col-3">
+                <form action="./accountview.php" method="POST">
                 <table>
                     <tbody>
                         <tr>
@@ -81,9 +83,16 @@
                         </tr>
                     </tbody>
                 </table>
-                    <button type="submit" class="btn form-button btn-success" name="change-btn">Ubah</button>
+                <button type="submit" class="btn form-button btn-success" name="change-btn">Ubah</button>
+                </form>
             </div>
         </div>
     </div>
 </body>
 </html>
+<?php
+    if (isset($_POST['change-btn'])) {
+        $_SESSION['emailRelated'] = $emailRelated;
+        header("Location: ./accountedit.php");
+    }
+?>

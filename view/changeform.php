@@ -51,7 +51,7 @@
     <div class="content">
         <div class="form-container">
             <div class="edit-form col-4">
-                <form action="./accountedit.php" method="post">
+                <form action="./changeform.php" method="post">
                     <div class="form-group">
                         <label for="fullNameInput" class="form-label" value="Your name">Nama Lengkap</label>
                         <input type="text" class="form-control" name="fullNameInput" value="<?php echo $emailRelated?>" required>
