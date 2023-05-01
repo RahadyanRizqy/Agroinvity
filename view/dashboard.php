@@ -469,6 +469,11 @@
               Keluar
             </button>
           </div>
+          <div class="temproal-logout-btn mt-5">
+            <button class="btn btn-primary" name="viewacc-btn">
+              Edit Akun
+            </button>
+          </div>
           </form>
 		</main>
 		<!-- End Main -->
@@ -487,5 +492,9 @@
   if(isset($_POST['logout-btn'])) {
     session_destroy();
     header("Location: ./login.php");
+  }
+  if(isset($_POST['viewacc-btn'])) {
+    $_SESSION['emailRelated'] = $emailRelated;
+    header("Location: ./accountview.php");
   }
 ?>
