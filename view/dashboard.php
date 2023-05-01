@@ -311,9 +311,17 @@
             ?></p>
           </div>
           <div class="add-button mt-3">
-            <button type="submit" class="btn btn-success" name="add-btn" id="add-btn" onclick="btnLogic()">Tambah</button>
+            <form action="./addform.php" method="post">
+              <button type="submit" class="btn btn-success" name="add-btn" id="add-btn">Tambah</button>
+            </form>
             <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
           </div>
+          <?php
+          if (isset($_POST['add-btn'])) {
+              $_SESSION['emailRelated'] = $emailRelated;
+              header("Location: ./addform.php");
+            }
+          ?>
           <!-- CRUD FORM -->
           <div class="form-add mt-3" style="display: none;" id="crud-form">
             <form action="" method="post">
@@ -338,16 +346,10 @@
                 </tbody>
               </table>
             </form>
-            <div class="add-button mt-3" id="cancel-save">
+            <!-- <div class="add-button mt-3" id="cancel-save">
               <button type="submit" class="btn btn-danger cancel-btn" name="cancel-btn" id="cancel-btn" onclick="btnLogic()">Batal</button>
               <button type="submit" class="btn btn-primary save-btn" name="save-btn" id="save-btn" onclick="btnLogic()">Simpan</button>
-            <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
-            </div>
-            <?php
-              if(isset($_POST['save-btn'])) {
-                echo "";
-              }
-            ?>
+            </div> -->
           </div>
           <script type="text/javascript">
             document.getElementById("crud-form").style.display = "none";
@@ -364,7 +366,7 @@
                 }
             }
           </script>
-          <?php
+          <!-- <?php
             if (isset($_POST['stuffInput']) && (isset($_POST['qtyInput']) && (isset($_POST['priceInput'])))) {
               $stuffName = $_POST['stuffInput'];
               $stuffQty = $_POST['qtyInput'];
@@ -373,16 +375,20 @@
             if (isset($_POST['save-btn'])) {
               // DRAFT
             }
-          ?>
+          ?> -->
           <?php
             if (isset($_POST['change-btn'])) {
-              $rowId = $_POST['data-id'];
-              $_SESSION['rowId'] = $rowId;
-              echo "$rowId";
+              $changeId = $_POST['data-id'];
+              $_SESSION['changeId'] = $changeId;
+              $_SESSION['emailRelated'] = $emailRelated;
+              header("Location: ./changeform.php");
+              echo "Change: $changeId";
             }
-            if (isset($_GET['delete'])) {
-              $rowId = $_GET['delete'];
-              
+            if (isset($_POST['delete-btn'])) {
+              $deleteId = $_POST['data-id'];
+              $_SESSION['deleteId'] = $deleteId;
+              echo "Delete: $deleteId";
+              // DO DELETE THE DATA
             }       
             ?>
           <div class="crud-table">
