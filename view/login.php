@@ -55,7 +55,7 @@
                 $_SESSION['emailRelated'] = $emailRelated;
                 $_SESSION['accType'] = $accType;
                 // echo "<script>alert('$emailResult')</script>";
-                header("Location: dashboard.php");
+                header("Location: dashboard.php?table=1");
             } 
             else {
                 // echo "<script>alert('Email atau password Anda salah. Silahkan coba lagi!')</script>";

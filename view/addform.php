@@ -53,26 +53,18 @@
             <div class="edit-form col-4">
                 <form action="./addform.php" method="post">
                     <div class="form-group">
-                        <label for="fullNameInput" class="form-label" value="Your name">Nama Lengkap</label>
-                        <input type="text" class="form-control" name="fullNameInput" value="<?php echo $emailRelated?>" required>
+                        <label for="stuffInput" class="form-label">Nama Barang: </label>
+                        <input type="text" class="form-control" name="stuffInput" placeholder="cth: Pestisida X" required>
                     </div>
                     <div class="form-group">
-                        <label for="phoneNumberInput" class="form-label">Nomor Handphone</label>
-                        <input type="number" class="form-control" name="phoneNumberInput" value="<?php echo $emailRelated?>" required>
+                        <label for="qtyInput" class="form-label">Jumlah: </label>
+                        <input type="number" class="form-control" name="qtyInput" placeholder="cth: 2" required>
                     </div>
                     <div class="form-group">
-                        <label for="mailInput" class="form-label">Alamat email</label>
-                        <input type="email" class="form-control" name="mailInput" aria-describedby="emailHelp" placeholder="cth: arcueidbrune@stud.com" required>
+                        <label for="mailInput" class="form-label">Harga: </label>
+                        <input type="number" class="form-control" name="mailInput" aria-describedby="emailHelp" placeholder="cth: 55000" name="priceInput" required>
                     </div>
-                    <div class="form-group">
-                        <label for="passwordInput" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="passwordInput" placeholder="cth: arc2512" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="addressInput" class="form-label">Alamat</label>
-                        <input type="search" class="form-control" name="addressInput" placeholder="cth: Jl. Crimson Moon No. 25 Blok 12" required>
-                    </div>
-                    <button type="submit" class="btn form-button btn-success" name="change-btn">Ubah dan Simpan</button>
+                    <button type="submit" class="btn form-button btn-success" name="save-btn">Tambahkan</button>
                     <button type="submit" class="btn form-button btn-danger" name="cancel-btn">Batal</button>
                 </form>
             </div>
@@ -82,6 +74,9 @@
 </html>
 <?php
     if(isset($_POST['cancel-btn'])) {
+        header("Location: ./dashboard.php");
+    }
+    if(isset($_POST['save-btn'])) {
         header("Location: ./dashboard.php");
     }
 ?>
