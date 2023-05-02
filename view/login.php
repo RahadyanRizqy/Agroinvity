@@ -2,6 +2,7 @@
     include '../model/database.php';
     session_start();
     ob_start();
+    //tidak bisa ke dashaboard 
     $accountExist = True;
     $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
     if($pageWasRefreshed==1) {
