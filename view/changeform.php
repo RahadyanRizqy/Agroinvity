@@ -1,7 +1,15 @@
 <?php
+    include '../model/database.php';
     session_start();
     ob_start();
-    $emailRelated = $_SESSION['emailRelated'];
+    // $emailRelated = $_SESSION['emailRelated'];
+    $changeId = $_SESSION['changeId'];
+    // $query = mysqli_query($db_conn, "SELECT * FROM tb_akun");
+    // $result = mysqli_fetch_row($query);
+    // $namaBarang = $result[0];
+    // $jumlahBarang = $result[1];
+    // $hargaBarang = $result[2];
+    
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +42,7 @@
             justify-content: center;
             border-radius: 0.5rem;
             box-shadow: 5px 5px 5px 5px #263043;
+            flex-direction: column;
         }
 
         form > div > .ask {
@@ -53,28 +62,28 @@
             <div class="edit-form col-4">
                 <form action="./changeform.php" method="post">
                     <div class="form-group">
-                        <label for="fullNameInput" class="form-label" value="Your name">Nama Lengkap</label>
-                        <input type="text" class="form-control" name="fullNameInput" value="<?php echo $emailRelated?>" required>
+                        <label for="stuffId" class="form-label">ID Bahan</label>
+                        <input type="number" class="form-control" name="stuffId" value="<?php echo "TEST"?>" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="phoneNumberInput" class="form-label">Nomor Handphone</label>
-                        <input type="number" class="form-control" name="phoneNumberInput" value="<?php echo $emailRelated?>" required>
+                        <label for="stuffNameInput" class="form-label">Nama Barang</label>
+                        <input type="text" class="form-control" name="stuffNameInput" value="<?php echo "TEST"?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="mailInput" class="form-label">Alamat email</label>
+                        <label for="mailInput" class="form-label">Jumlah Barang</label>
                         <input type="email" class="form-control" name="mailInput" aria-describedby="emailHelp" placeholder="cth: arcueidbrune@stud.com" required>
                     </div>
                     <div class="form-group">
-                        <label for="passwordInput" class="form-label">Password</label>
+                        <label for="passwordInput" class="form-label">Harga</label>
                         <input type="password" class="form-control" name="passwordInput" placeholder="cth: arc2512" required>
                     </div>
-                    <div class="form-group">
-                        <label for="addressInput" class="form-label">Alamat</label>
-                        <input type="search" class="form-control" name="addressInput" placeholder="cth: Jl. Crimson Moon No. 25 Blok 12" required>
-                    </div>
                     <button type="submit" class="btn form-button btn-success" name="change-btn">Ubah dan Simpan</button>
-                    <button type="submit" class="btn form-button btn-danger" name="cancel-btn">Batal</button>
                 </form>
+            </div>
+            <div class="edit-form col-4 mt-2">
+                <form action="./changeform.php" method="post">
+                        <button type="submit" class="btn form-button btn-danger" name="cancel-btn">Batal</button>
+                </form
             </div>
         </div>
     </div>
@@ -82,6 +91,6 @@
 </html>
 <?php
     if(isset($_POST['cancel-btn'])) {
-        header("Location: ./dashboard.php");
+        header("Location: ./dashboard.php?table=1");
     }
 ?>

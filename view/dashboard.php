@@ -40,7 +40,7 @@
   } else if ($accType == 3) {
     $emailRelated = $_SESSION['emailRelated'];
     $workerRelatedPartner = mysqli_query($db_conn, "SELECT b.email, a.email FROM tb_akun a, tb_akun b WHERE b.fk_id_rel_akun = a.id_akun AND b.email = '$emailRelated';");
-  }
+  }       
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -274,18 +274,18 @@
   
 		  <ul class="sidebar-list">
 			<li class="sidebar-list-item">
-        <form action="./dashboard.php?table=<?php echo 1?>" method="post">
+        <form action="./dashboard.php?table=1" method="post">
           <button class="btn side-btn">Bahan Baku</button>
         </form>
 			</li>
 			<li class="sidebar-list-item">
-        <form action="./dashboard.php?table=<?php echo 2?>" method="post">
-          <button class="btn side-btn">Produksi</button>
+        <form action="./dashboard.php?table=2" method="post">
+          <button class="btn side-btn">Operasional</button>
         </form>
 			</li>
       <li class="sidebar-list-item">
-        <form action="./dashboard.php?table=<?php echo 3?>" method="post">
-          <button class="btn side-btn">Operasional</button>
+        <form action="./dashboard.php?table=3" method="post">
+          <button class="btn side-btn">Produksi</button>
         </form>
 			</li>
 		  </ul>
@@ -306,6 +306,16 @@
           }
           else if ($tableId == 3) {
             echo "<h2>Pencatatan Produksi</h2>";
+          }
+
+          if ($tableId == 1 || $tableId == 2) {
+            
+          }
+          if (isset($_POST['delete-btn'])) {
+            $deleteId = $_POST['data-id'];
+            $_SESSION['deleteId'] = $deleteId;
+            echo "Delete: $deleteId";
+            // DO DELETE THE DATA
           }
         }
       ?>
@@ -401,21 +411,20 @@
             }
           ?> -->
           <?php
-            if (isset($_POST['change-btn'])) {
+          if (isset($_POST['change-btn'])) {
+            $changeId = $_POST['data-id'];
+            $_SESSION['changeId'] = $changeId;
+            header("Location: ./changeform.php?form=$tableId");
+            // echo "$formType";
+            // echo "Change: $changeId";
+          } else if (isset($_POST['change-btn'])) {
               $changeId = $_POST['data-id'];
               $_SESSION['changeId'] = $changeId;
-              $_SESSION['emailRelated'] = $emailRelated;
-              header("Location: ./changeform.php");
-              echo "Change: $changeId";
+              header("Location: ./changeform.php?form=$tableId");
+              // echo "$formType";
+              // echo "Change: $changeId";
             }
-            if (isset($_POST['delete-btn'])) {
-              $deleteId = $_POST['data-id'];
-              $_SESSION['deleteId'] = $deleteId;
-              echo "Delete: $deleteId";
-              // DO DELETE THE DATA
-            }       
           ?>
-          
           <?php
             if ($tableId == 1) { # BAHAN BAKU
           ?>
@@ -483,11 +492,11 @@
                           <td><?php echo $result[3] ?></td>
                           <td><?php echo $result[4] ?></td>
                           <td><?php echo $result[5] ?></td>
-                          <form action="./dashboard.php" method="post">
+                          <form action="" method="post">
                             <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                             <td> <input type="submit" id="change-btn" name="change-btn" class="btn btn-warning" value="Ubah"></td>
                           </form>
-                          <form action="./dashboard.php" method="post">
+                          <form action="" method="post">
                             <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                             <td> <input type="submit" id="delete-btn" name="delete-btn" class="btn btn-danger" value="Hapus"></td>
                           </form>
@@ -531,7 +540,7 @@
                           <td><?php echo $result[2] ?></td>
                           <td><?php echo $result[3] ?></td>
                           <td><?php echo $result[4] ?></td>
-                          <form action="./dashboard.php" method="post">
+                          <form action="./changeform.php?form=1" method="post">
                               <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                               <td> <input type="submit" name="change-btn" class="btn btn-warning" value="Ubah"></td>
                           </form>
@@ -616,7 +625,7 @@
                           <td><?php echo $result[3] ?></td>
                           <td><?php echo $result[4] ?></td>
                           <td><?php echo $result[5] ?></td>
-                          <form action="./dashboard.php" method="post">
+                          <form action="./changeform.php?form=1" method="post">
                             <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                             <td> <input type="submit" id="change-btn" name="change-btn" class="btn btn-warning" value="Ubah"></td>
                           </form>
@@ -641,7 +650,7 @@
                           <td><?php echo $result[2] ?></td>
                           <td><?php echo $result[3] ?></td>
                           <td><?php echo $result[4] ?></td>
-                          <form action="./dashboard.php" method="post">
+                          <form action="./changeform.php?form=1" method="post">
                             <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                             <td> <input type="submit" name="change-btn" class="btn btn-warning" value="Ubah"></td>
                           </form>
@@ -664,7 +673,7 @@
                           <td><?php echo $result[2] ?></td>
                           <td><?php echo $result[3] ?></td>
                           <td><?php echo $result[4] ?></td>
-                          <form action="./dashboard.php" method="post">
+                          <form action="./changeform.php?form=1" method="post">
                               <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                               <td> <input type="submit" name="change-btn" class="btn btn-warning" value="Ubah"></td>
                           </form>
@@ -757,7 +766,7 @@
                           <td><?php echo $result[5] ?></td>
                           <td><?php echo $result[6] ?></td>
                           <td><?php echo $result[7] ?></td>
-                          <form action="./dashboard.php" method="post">
+                          <form action="./changeform.php?form=2" method="post">
                             <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                             <td> <input type="submit" id="change-btn" name="change-btn" class="btn btn-warning" value="Ubah"></td>
                           </form>
@@ -784,7 +793,7 @@
                           <td><?php echo $result[4] ?></td>
                           <td><?php echo $result[5] ?></td>
                           <td><?php echo $result[6] ?></td>
-                          <form action="./dashboard.php" method="post">
+                          <form action="./changeform.php?form=2" method="post">
                             <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                             <td> <input type="submit" name="change-btn" class="btn btn-warning" value="Ubah"></td>
                           </form>
@@ -809,7 +818,7 @@
                           <td><?php echo $result[4] ?></td>
                           <td><?php echo $result[5] ?></td>
                           <td><?php echo $result[6] ?></td>
-                          <form action="./dashboard.php" method="post">
+                          <form action="./changeform.php?form=2" method="post">
                               <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
                               <td> <input type="submit" name="change-btn" class="btn btn-warning" value="Ubah"></td>
                           </form>
