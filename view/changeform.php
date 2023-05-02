@@ -86,7 +86,12 @@
                     <button type="submit" class="btn form-button btn-success" name="change-btn">Ubah dan Simpan</button>
                     </form>
                 <?php
-                    if($formId == 2) {
+                        }
+
+                    else if($formId == 2) {
+                        $query = mysqli_query($db_conn, "SELECT id_pengeluaran, nama, jumlah, harga FROM tb_pengeluaran WHERE id_pengeluaran = $changeId;");
+                        $result = mysqli_fetch_row($query);
+                        var_dump($result);
                 ?>
                     <form action="./changeform.php?form=2" method="post">
                     <div class="form-group">
@@ -109,11 +114,10 @@
                     </form>
                 <?php
                     }
-                        } 
                         else if ($formId == 3) {
                             $query = mysqli_query($db_conn, "SELECT id_produksi, nama_produksi, jumlah, produk_terjual, produk_tak_terjual, harga_jual FROM tb_produksi WHERE id_produksi = $changeId;");
                             $result = mysqli_fetch_row($query);
-                            ?>
+                ?>
                     <form action="./changeform.php?form=3" method="post">
                     <div class="form-group">
                         <label for="stuffId" class="form-label">ID Bahan</label>
@@ -125,15 +129,15 @@
                     </div>
                     <div class="form-group">
                         <label for="stuffQty" class="form-label">Jumlah Barang</label>
-                        <input type="number" class="form-control" name="stuffQty" aria-describedby="emailHelp" value="<?php echo "$result[2]"?>" required>
+                        <input type="number" class="form-control" name="stuffQty" value="<?php echo "$result[2]"?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="stuffPrice" class="form-label">Produk Terjual</label>
-                        <input type="number" class="form-control" name="stuffPrice" value="<?php echo $result[3]?>" required>
+                        <label for="stuffSold" class="form-label">Produk Terjual</label>
+                        <input type="number" class="form-control" name="stuffSold" value="<?php echo $result[3]?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="stuffPrice" class="form-label">Produk Tak Terjual</label>
-                        <input type="number" class="form-control" name="stuffPrice" value="<?php echo $result[4]?>" required>
+                        <label for="stuffUnsold" class="form-label">Produk Tak Terjual</label>
+                        <input type="number" class="form-control" name="stuffUnsold" value="<?php echo $result[4]?>" required>
                     </div>
                     <div class="form-group">
                         <label for="stuffPrice" class="form-label">Harga Jual</label>
@@ -163,7 +167,10 @@
     $formId = $_GET['form'];
     if(isset($_POST['change-btn'])) {
         if ($formId == 1) {
-            mysqli_query($db_conn, "");
+            $stuffNameInput = $_POST['stuffNameInput'];
+            $stuffQty = $_POST['stuffQty'];
+            $stuffPrice = $_POST['stuffPrice'];
+            mysqli_query($db_conn, "UPDATE `tb_produksi` SET `nama_produksi`='',`jumlah`='[value-3]', `produk_terjual`='[value-5]',`produk_tak_terjual`='[value-6]',`harga_jual`='[value-7]' WHERE id_produksi = $changeId");
             header("Location: ./dashboard.php?table=1");
         }
         else if ($formId == 2) {
@@ -171,7 +178,12 @@
             header("Location: ./dashboard.php?table=2");
         }
         else if ($formId == 3) {
-            mysqli_query($db_conn, "");
+            $stuffNameInput = $_POST['stuffNameInput'];
+            $stuffQty = $_POST['stuffQty'];
+            $stuffPrice = $_POST['stuffPrice'];
+            $stuffSold = $_POST['stuffSold'];
+            $stuffUnsold = $_POST['stuffUnsold'];
+            mysqli_query($db_conn, "UPDATE `tb_produksi` SET `nama_produksi`='$stuffNameInput',`jumlah`=$stuffQty, `produk_terjual`=$stuffSold,`produk_tak_terjual`=$stuffUnsold,`harga_jual`=$stuffPrice WHERE id_produksi = $changeId");
             header("Location: ./dashboard.php?table=3");
         }
     }
