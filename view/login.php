@@ -39,8 +39,9 @@
                 $row = mysqli_fetch_assoc($result);
                 
                 $emailRelated = $row['email'];
-                $accType = $row['fk_id_tipe_akun'];
+                $idAccRelated = $row['id_akun'];
                 
+                $accType = $row['fk_id_tipe_akun'];
                 // $superadminDetected = false;
                 // $workerDetected = false;
                 // $partnerDetected = false;
@@ -54,6 +55,7 @@
 
                 // $_SESSION['workerRelated'] = $accType;
                 $_SESSION['emailRelated'] = $emailRelated;
+                $_SESSION['idAccRelated'] = $idAccRelated;
                 $_SESSION['accType'] = $accType;
                 // echo "<script>alert('$emailResult')</script>";
                 header("Location: dashboard.php?table=1");

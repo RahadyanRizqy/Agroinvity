@@ -4,8 +4,7 @@
     ob_start();
     // $emailRelated = $_SESSION['emailRelated'];
     $changeId = $_SESSION['changeId'];
-    // $query = mysqli_query($db_conn, "SELECT * FROM tb_akun");
-    // $result = mysqli_fetch_row($query);
+    // $tableId = $_SESSION['formType'];
     // $namaBarang = $result[0];
     // $jumlahBarang = $result[1];
     // $hargaBarang = $result[2];
@@ -36,7 +35,7 @@
         .form-container {
             background-color: #263043;
             width: 900px;
-            height: 75vh;
+            height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -60,25 +59,92 @@
     <div class="content">
         <div class="form-container">
             <div class="edit-form col-4">
-                <form action="./changeform.php" method="post">
+                <?php
+                    $formId = $_GET['form'];
+                    if(isset($formId)) {
+                        if($formId == 1) {
+                            $query = mysqli_query($db_conn, "SELECT id_pengeluaran, nama, jumlah, harga FROM tb_pengeluaran WHERE id_pengeluaran = $changeId;");
+                            $result = mysqli_fetch_row($query);
+                            ?>
+                    <form action="./changeform.php?form=1" method="post">
                     <div class="form-group">
                         <label for="stuffId" class="form-label">ID Bahan</label>
-                        <input type="number" class="form-control" name="stuffId" value="<?php echo "TEST"?>" disabled>
+                        <input type="number" class="form-control" name="stuffId" value="<?php echo $changeId?>" disabled>
                     </div>
                     <div class="form-group">
                         <label for="stuffNameInput" class="form-label">Nama Barang</label>
-                        <input type="text" class="form-control" name="stuffNameInput" value="<?php echo "TEST"?>" required>
+                        <input type="text" class="form-control" name="stuffNameInput" value="<?php echo $result[1]?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="mailInput" class="form-label">Jumlah Barang</label>
-                        <input type="email" class="form-control" name="mailInput" aria-describedby="emailHelp" placeholder="cth: arcueidbrune@stud.com" required>
+                        <label for="stuffQty" class="form-label">Jumlah Barang</label>
+                        <input type="number" class="form-control" name="stuffQty" aria-describedby="emailHelp" value="<?php echo "$result[2]"?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="passwordInput" class="form-label">Harga</label>
-                        <input type="password" class="form-control" name="passwordInput" placeholder="cth: arc2512" required>
+                        <label for="stuffPrice" class="form-label">Harga</label>
+                        <input type="number" class="form-control" name="stuffPrice" value="<?php echo $result[3]?>" required>
                     </div>
                     <button type="submit" class="btn form-button btn-success" name="change-btn">Ubah dan Simpan</button>
-                </form>
+                    </form>
+                <?php
+                    if($formId == 2) {
+                ?>
+                    <form action="./changeform.php?form=2" method="post">
+                    <div class="form-group">
+                        <label for="stuffId" class="form-label">ID Bahan</label>
+                        <input type="number" class="form-control" name="stuffId" value="<?php echo $changeId?>" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuffNameInput" class="form-label">Nama Barang</label>
+                        <input type="text" class="form-control" name="stuffNameInput" value="<?php echo $result[1]?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuffQty" class="form-label">Jumlah Barang</label>
+                        <input type="number" class="form-control" name="stuffQty" aria-describedby="emailHelp" value="<?php echo "$result[2]"?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuffPrice" class="form-label">Harga</label>
+                        <input type="number" class="form-control" name="stuffPrice" value="<?php echo $result[3]?>" required>
+                    </div>
+                    <button type="submit" class="btn form-button btn-success" name="change-btn">Ubah dan Simpan</button>
+                    </form>
+                <?php
+                    }
+                        } 
+                        else if ($formId == 3) {
+                            $query = mysqli_query($db_conn, "SELECT id_produksi, nama_produksi, jumlah, produk_terjual, produk_tak_terjual, harga_jual FROM tb_produksi WHERE id_produksi = $changeId;");
+                            $result = mysqli_fetch_row($query);
+                            ?>
+                    <form action="./changeform.php?form=3" method="post">
+                    <div class="form-group">
+                        <label for="stuffId" class="form-label">ID Bahan</label>
+                        <input type="number" class="form-control" name="stuffId" value="<?php echo $changeId?>" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuffNameInput" class="form-label">Nama Barang</label>
+                        <input type="text" class="form-control" name="stuffNameInput" value="<?php echo $result[1]?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuffQty" class="form-label">Jumlah Barang</label>
+                        <input type="number" class="form-control" name="stuffQty" aria-describedby="emailHelp" value="<?php echo "$result[2]"?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuffPrice" class="form-label">Produk Terjual</label>
+                        <input type="number" class="form-control" name="stuffPrice" value="<?php echo $result[3]?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuffPrice" class="form-label">Produk Tak Terjual</label>
+                        <input type="number" class="form-control" name="stuffPrice" value="<?php echo $result[4]?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stuffPrice" class="form-label">Harga Jual</label>
+                        <input type="number" class="form-control" name="stuffPrice" value="<?php echo $result[5]?>" required>
+                    </div>
+                    <button type="submit" class="btn form-button btn-success" name="change-btn">Ubah dan Simpan</button>
+                    </form>
+                            <?php
+                        } 
+                    } 
+                ?>
             </div>
             <div class="edit-form col-4 mt-2">
                 <form action="./changeform.php" method="post">
@@ -92,5 +158,21 @@
 <?php
     if(isset($_POST['cancel-btn'])) {
         header("Location: ./dashboard.php?table=1");
+    }
+
+    $formId = $_GET['form'];
+    if(isset($_POST['change-btn'])) {
+        if ($formId == 1) {
+            mysqli_query($db_conn, "");
+            header("Location: ./dashboard.php?table=1");
+        }
+        else if ($formId == 2) {
+            mysqli_query($db_conn, "");
+            header("Location: ./dashboard.php?table=2");
+        }
+        else if ($formId == 3) {
+            mysqli_query($db_conn, "");
+            header("Location: ./dashboard.php?table=3");
+        }
     }
 ?>
