@@ -66,7 +66,7 @@
             <div class="edit-form col-4">
                 <form action="./addform.php?form=1" method="post">
                     <div class="form-group">
-                        <label for="stuffInput" class="form-label"><?php echo "Nama Barang $formId"?>: </label>
+                        <label for="stuffInput" class="form-label"><?php echo "Nama Barang Bahan Baku"?>: </label>
                         <input type="text" class="form-control" name="stuffInput" placeholder="cth: Pestisida X" required>
                     </div>
                     <div class="form-group">
@@ -92,8 +92,8 @@
             <div class="edit-form col-4">
                 <form action="./addform.php?form=2" method="post">
                     <div class="form-group">
-                        <label for="stuffInput" class="form-label"><?php echo "Nama Barang $formId"?>: </label>
-                        <input type="text" class="form-control" name="stuffInput" placeholder="cth: Pestisida X" required>
+                        <label for="stuffInput" class="form-label"><?php echo "Nama Barang Operasional"?>: </label>
+                        <input type="text" class="form-control" name="stuffInput" placeholder="cth: Gas LPG" required>
                     </div>
                     <div class="form-group">
                         <label for="qtyInput" class="form-label">Jumlah: </label>
