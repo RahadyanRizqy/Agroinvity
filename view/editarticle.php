@@ -2,6 +2,9 @@
     include '../model/database.php';
     session_start();
     ob_start();
+    $changeId = $_SESSION['changeId'];
+    $result = mysqli_query($db_conn, "SELECT * FROM tb_artikel WHERE id_artikel = $changeId");
+    $row = mysqli_fetch_assoc($result);
 ?>
 
 <!DOCTYPE html>
@@ -52,23 +55,22 @@
 <body>
     <section class="main-container">
         <div class="form-container">
-            <form action="./addarticle.php" method="POST">
+            <form action="./editarticle.php" method="POST">
                 <div class="form-group">
                     <label for="title">Judul</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="cth: Tanam Pintar" required>
+                    <input type="text" class="form-control" name="title" id="title" value="<?php echo $row['judul_artikel']?>" required>
                 </div>
                 <div class="form-group">
                     <label for="article-content">Isi artikel</label>
-                    <textarea class="form-control" name="article-content" id="article-content" rows="15" placeholder="cth: Sebagai seorang petani..." required></textarea>
+                    <textarea class="form-control" name="article-content" id="article-content" rows="15" required><?php echo $row['isi_artikel']?></textarea>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary" name="save-btn">Tambahkan</button>
                 </div>
             </form>
             <div class="form-group mt-0">
-                <form action="./addarticle.php" method="post">
+                <form action="./editarticle.php" method="POST">
                     <button type="submit" class="btn btn-danger" name="cancel-btn">Batal</button>
-
                 </form>
             </div>
         </div>
@@ -79,13 +81,11 @@
     if (isset($_POST['save-btn'])) {
         $content = $_POST['article-content'];
         $title = $_POST['title'];
-        $sql = "INSERT INTO `tb_artikel` (`judul_artikel`, `isi_artikel`) VALUES ('$title', '$content');";
-        $result = mysqli_query($db_conn, $sql);
-        if ($result) {
-            header("Location ../view/dashboard.php?article=1");
-        }
+        $sql = "UPDATE `tb_artikel` SET `judul_artikel`='$title',`isi_artikel`='$content' WHERE id_artikel = $changeId";
+        mysqli_query($db_conn, $sql);
+        header("Location: ./dashboard.php?table=4");
     }
     if (isset($_POST['cancel-btn'])) {
-        header("Location: ../view/dashboard.php?article=1");
+        header("Location: ./dashboard.php?table=4");
     }
 ?>

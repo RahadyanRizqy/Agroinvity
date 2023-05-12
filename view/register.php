@@ -14,7 +14,7 @@
         $phoneNumber = $_POST['phoneNumberInput'];
         $email = $_POST['mailInput'];
         $password = $_POST['passwordInput'];
-        $address = $_POST['addressInput'];
+        // $address = $_POST['addressInput'];
         $acctype = 2;
         $status = 1;
         if (isset($_POST['regist-btn'])) {
@@ -25,7 +25,7 @@
                 $accountExist = True;
             }
             else {
-                $sql = "INSERT INTO `tb_akun`(`nama_lengkap`, `no_hp`, `email`, `password`, `alamat`, `fk_id_tipe_akun`, `status`) VALUES ('$fullName','$phoneNumber','$email','$password','$address','$acctype','$status')";
+                $sql = "INSERT INTO `tb_akun`(`nama_lengkap`, `no_hp`, `email`, `password`, `fk_id_tipe_akun`, `status`) VALUES ('$fullName','$phoneNumber','$email','$password','$acctype','$status')";
                 $result = mysqli_query($db_conn, $sql);
                 if ($result) {
                     $sql = "SELECT * FROM tb_akun WHERE email='$email' AND password='$password'";
@@ -97,10 +97,10 @@
                             <label for="confirmPasswordInput" class="form-label">Konfirmasi password</label>
                             <input type="password" class="form-control" name="confirmPasswordInput" placeholder="cth: arc2512">
                         </div> -->
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="addressInput" class="form-label">Alamat</label>
                             <input type="search" class="form-control" name="addressInput" placeholder="cth: Jl. Crimson Moon No. 25 Blok 12" required>
-                        </div>
+                        </div> -->
                             <button type="submit" class="btn form-button btn-success" name="regist-btn">Daftar</button>
                         <div>
                             <span class="ask">Sudah punya akun? <a href="./login.php">Masuk</a> sekarang juga!</span>
@@ -126,11 +126,12 @@
             </div>
             <div class="col-md-6 g-0">
                 <div class="form-left-side d-flex justify-content-center align-items-center">
-                    <div class="col-md-6 h-50">
-                        <div class="mb-lg-3">
-                            <h2>Selamat Datang di Agroinvity</h2>
-                        </div>
+                    <div class="col-md-6">
+                        <!-- <div class="mb-lg-3">
+                            
+                        </div> -->
                         <div>
+                            <h2>Selamat Datang di Agroinvity</h2>
                             <p>
                                 Silahkan mendaftarkan diri anda sesuai form yang telah disediakan dengan keterangan yang valid untuk memulai menggunakan Agroinvity!
                             </p> 

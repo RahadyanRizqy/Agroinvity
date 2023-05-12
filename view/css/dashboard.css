@@ -187,3 +187,7 @@ body {
     display: block;
     color: white;
   }
+
+  .calc-group {
+    margin: 10px;
+  }
