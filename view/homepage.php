@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="style.css">
 
     <!-- Logo Title -->
-    <link rel="icon" href="Assets/img/Logo2.png">
+    <link rel="icon" href="../Assets/img/Logo2.png">
 
     <title>Argoinvity</title>
     <style>
@@ -125,7 +125,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent position-fixed w-100">
         <div class="container">
           <a class="navbar-brand" href="#">
-                <img src="Assets/img/Logo2.png" alt="" width="30" class="d-inline-block align-text-top me-3">
+                <img src="../Assets/img/Logo2.png" alt="" width="30" class="d-inline-block align-text-top me-3">
             Argoinvity</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -179,13 +179,13 @@
 
                     <button class="button-lg-primary">Temukan Solusinya</button>
                     <a href="#">
-                      <img src="Assets/img/arrow.png" alt="">
+                      <img src="../Assets/img/arrow.png" alt="">
                     </a>
                 </div>
             </div>
    
-            <img src="Assets/img/Hero.png" alt="" class="position-absolute end-0 bottom-0 img-hero">
-            <img src="Assets/img/Layer.png" alt="" class="accsent-img h-100 position-absolute top-0 start-0">
+            <img src="../Assets/img/Hero.png" alt="" class="position-absolute end-0 bottom-0 img-hero">
+            <img src="../Assets/img/Layer.png" alt="" class="accsent-img h-100 position-absolute top-0 start-0">
             
       
             

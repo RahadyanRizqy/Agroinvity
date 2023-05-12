@@ -30,8 +30,10 @@
                 if ($result) {
                     $sql = "SELECT * FROM tb_akun WHERE email='$email' AND password='$password'";
                     $result = mysqli_query($db_conn, $sql);
-                    
                     if ($result->num_rows > 0) {
+                        $row = mysqli_fetch_assoc($result);
+                        $_SESSION['newIdRelated'] = $row['id_akun'];
+                        $_SESSION['newEmailRelated'] = $row['email'];
                         // $superadminDetected = false;
                         // $workerDetected = false;
                         // $partnerDetected = false;
@@ -44,16 +46,17 @@
                         // }
 
                         // $_SESSION['workerRelated'] = $accType;
+                        $_SESSION['newAccType'] = $row['fk_id_tipe_akun'];
                         $_SESSION['loggedin'] = true;
-                        $_SESSION['email'] = $email;
-                        // echo "<script>alert('$emailResult')</script>";
-                        header("Location: dashboard.php");
+                        
                 } 
                 else {
                     echo "<script>alert('$sql')</script>";
                 }
             }
         }
+        header("Location: login.php");
+        echo "<script>alert('Akun terdaftar silahkan login!')</script>";
         }
     }
 ?>
@@ -66,7 +69,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/user_validation.css">
 </head>
 <body>
     <section class="register">

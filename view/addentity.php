@@ -2,8 +2,7 @@
     include '../model/database.php';
     session_start();
     ob_start();
-    $emailRelated = $_SESSION['emailRelated'];
-    $idAccRelated = $_SESSION['idAccRelated'];
+    $userId = $_GET['user'];
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +63,7 @@
                     if ($formId == 1) {
             ?>
             <div class="edit-form col-4">
-                <form action="./addform.php?form=1" method="post">
+                <form action="./addentity.php?form=1&user=<?php echo $userId ?>" method="post">
                     <div class="form-group">
                         <label for="stuffInput" class="form-label"><?php echo "Nama Barang Bahan Baku"?>: </label>
                         <input type="text" class="form-control" name="stuffInput" placeholder="cth: Pestisida X" required>
@@ -81,7 +80,7 @@
                 </form>
             </div>
             <div class="edit-form col-4 mt-2">
-                <form action="./addform.php" method="post">
+                <form action="./addentity.php" method="post">
                         <button type="submit" class="btn form-button btn-danger" name="cancel-btn">Batal</button>
                 </form>
             </div>
@@ -90,7 +89,7 @@
                     else if ($formId == 2) {
             ?>
             <div class="edit-form col-4">
-                <form action="./addform.php?form=2" method="post">
+                <form action="./addentity.php?form=2&user=<?php echo $userId ?>" method="post">
                     <div class="form-group">
                         <label for="stuffInput" class="form-label"><?php echo "Nama Barang Operasional"?>: </label>
                         <input type="text" class="form-control" name="stuffInput" placeholder="cth: Gas LPG" required>
@@ -107,7 +106,7 @@
                 </form>
             </div>
             <div class="edit-form col-4 mt-2">
-                <form action="./addform.php" method="post">
+                <form action="./addentity.php" method="post">
                         <button type="submit" class="btn form-button btn-danger" name="cancel-btn">Batal</button>
                 </form>
             </div>
@@ -116,7 +115,7 @@
                     else {
             ?>
             <div class="edit-form col-4">
-                <form action="./addform.php?form=3" method="post">
+                <form action="./addentity.php?form=3" method="post">
                     <div class="form-group">
                         <label for="stuffInput" class="form-label">Nama Produk: </label>
                         <input type="text" class="form-control" name="stuffInput" placeholder="cth: Daun Teh 1kg" required>
@@ -141,7 +140,7 @@
                 </form>
             </div>
             <div class="edit-form col-4 mt-2">
-                <form action="./addform.php" method="post">
+                <form action="./addentity.php" method="post">
                         <button type="submit" class="btn form-button btn-danger" name="cancel-btn">Batal</button>
                 </form>
             </div>
@@ -164,20 +163,20 @@
         $qtyInput = $_POST['qtyInput'];
         $priceInput = $_POST['priceInput'];
         if ($formId == 1) {
-            $query = mysqli_query($db_conn, "INSERT INTO `tb_pengeluaran`(`nama`, `jumlah`, `harga`, `fk_user`, `fk_pengeluaran`) VALUES ('$stuffInput', $qtyInput, $priceInput,$idAccRelated,1)");
+            $query = mysqli_query($db_conn, "INSERT INTO `tb_pengeluaran`(`nama`, `jumlah`, `harga`, `fk_user`, `fk_pengeluaran`) VALUES ('$stuffInput', $qtyInput, $priceInput,$userId,1)");
+            echo "<script>alert(\"Data berhasil ditambahkan\");</script>";
             header("Location: ./dashboard.php?table=1");
         } else if ($formId == 2) {
-            $query = mysqli_query($db_conn, "INSERT INTO `tb_pengeluaran`(`nama`, `jumlah`, `harga`, `fk_user`, `fk_pengeluaran`) VALUES ('$stuffInput', $qtyInput, $priceInput,$idAccRelated,2)");
+            $query = mysqli_query($db_conn, "INSERT INTO `tb_pengeluaran`(`nama`, `jumlah`, `harga`, `fk_user`, `fk_pengeluaran`) VALUES ('$stuffInput', $qtyInput, $priceInput,$userId,2)");
+            echo "<script>alert(\"Data berhasil ditambahkan\");</script>";
             header("Location: ./dashboard.php?table=2");
         } 
         else {
             $stuffSold = $_POST['stuffSold'];
             $stuffUnsold = $_POST['stuffUnsold'];
             $query = mysqli_query($db_conn, "INSERT INTO `tb_produksi`(`nama_produksi`, `jumlah`, `produk_terjual`, `produk_tak_terjual`, `harga_jual`, `fk_user`) VALUES ('$stuffInput', $qtyInput, $stuffSold, $stuffUnsold, $priceInput,$idAccRelated)");
-            header("Location: ./dashboard.php?table=3");
-        }
-        if ($query) {
             echo "<script>alert(\"Data berhasil ditambahkan\");</script>";
+            header("Location: ./dashboard.php?table=3");
         }
     }
 ?>

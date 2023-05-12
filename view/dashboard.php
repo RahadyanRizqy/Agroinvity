@@ -2,7 +2,7 @@
   include '../model/database.php';
   session_start();
   ob_start();
-  error_reporting(0);
+  error_reporting(1);
   $emailRelated = "";
   $stuffName = "";
   $stuffQty = "";
@@ -28,6 +28,9 @@
   // } else {
 
   // }
+  if (!(isset($accType))) {
+    $accType = $_SESSION['newAccType'];
+  }
   $accType = $_SESSION['accType'];
   // $pegawaiDetected = $_SESSION['workerelated'];
   // $accType = $_SESSION['acctype'];
@@ -43,7 +46,12 @@
     $emailRelated = $_SESSION['emailRelated'];
     $idAccRelated = $_SESSION['idAccRelated'];
     $workerRelatedPartner = mysqli_query($db_conn, "SELECT b.email, a.email FROM tb_akun a, tb_akun b WHERE b.fk_id_rel_akun = a.id_akun AND b.email = '$emailRelated';");
-  }       
+  }
+  
+  if (!(isset($emailRelated)) & !(isset($idAccRelated))) {
+    $emailRelated = $_SESSION['newEmailRelated'];
+    $idAccRelated = $_SESSION['newIdRelated'];
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -274,25 +282,49 @@
 			</div>
 			<span class="material-icons-outlined" onclick="closeSidebar()">close</span>
 		  </div>
-  
-		  <ul class="sidebar-list">
-			<li class="sidebar-list-item">
-        <a href=./dashboard.php"></a>
-        <form action="./dashboard.php?table=1" method="post">
-          <button class="btn side-btn">Bahan Baku</button>
-        </form>
-			</li>
-			<li class="sidebar-list-item">
-        <form action="./dashboard.php?table=2" method="post">
-          <button class="btn side-btn">Operasional</button>
-        </form>
-			</li>
-      <li class="sidebar-list-item">
-        <form action="./dashboard.php?table=3" method="post">
-          <button class="btn side-btn">Produksi</button>
-        </form>
-			</li>
-		  </ul>
+      <ul class="sidebar-list">
+      <?php
+        if ($accType != 1) {
+      ?>
+        <li class="sidebar-list-item">
+          <a href=./dashboard.php"></a>
+          <form action="./dashboard.php?table=1" method="post">
+            <button class="btn side-btn">Bahan Baku</button>
+          </form>
+        </li>
+        <li class="sidebar-list-item">
+          <form action="./dashboard.php?table=2" method="post">
+            <button class="btn side-btn">Operasional</button>
+          </form>
+        </li>
+        <li class="sidebar-list-item">
+          <form action="./dashboard.php?table=3" method="post">
+            <button class="btn side-btn">Produksi</button>
+          </form>
+        </li>
+        <li class="sidebar-list-item">
+          <form action="./dashboard.php?table=3" method="post">
+            <button class="btn side-btn">Kalkulator</button>
+          </form>
+        </li>
+      <?php
+        } else {
+      ?>
+        <li class="sidebar-list-item">
+          <a href=./dashboard.php"></a>
+          <form action="./dashboard.php?table=4" method="post">
+            <button class="btn side-btn">Artikel</button>
+          </form>
+        </li>
+        <li class="sidebar-list-item">
+          <form action="./dashboard.php?table=5" method="post">
+            <button class="btn side-btn">Data Akun</button>
+          </form>
+        </li>
+      <?php
+        }
+      ?>
+      </ul>
 		</aside>
 		<!-- End Sidebar -->
   
@@ -312,6 +344,12 @@
           else if ($tableId == 3) {
             echo "<h2>Pencatatan Produksi</h2>";
           }
+          else if ($tableId == 4) {
+            echo "<h2>Pencatatan Artikel</h2>";
+          }
+          else if ($tableId == 5) {
+            echo "<h2>Pencatatan Data Akun</h2>";
+          }
 
           // if ($tableId == 1 || $tableId == 2) {
             
@@ -327,7 +365,7 @@
                 echo "Pegawai: " . $result[0] . "<br>";
               } else if ($accType == 2) {
                 echo "Mitra: " . $emailRelated . "<br>";
-              } else {
+              } else if ($accType == 1) {
                 echo "Admin: " . $emailRelated . "<br>";
               }
             ?></p>
@@ -336,7 +374,7 @@
             if($tableId == 1) {
           ?>
             <div class="add-button mt-3">
-            <form action="./addform.php?form=1" method="post">
+            <form action="./addentity.php?form=1&user=<?php echo $idAccRelated?>" method="post">
               <button type="submit" class="btn btn-success" name="add-btn" id="add-btn">Tambah</button>
             </form>
             <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
@@ -346,16 +384,34 @@
             else if ($tableId == 2){
           ?>
             <div class="add-button mt-3">
-            <form action="./addform.php?form=2" method="post">
+            <form action="./addentity.php?form=2&user=<?php echo $idAccRelated?>" method="post">
               <button type="submit" class="btn btn-success" name="add-btn" id="add-btn">Tambah</button>
             </form>
             <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
             </div>
           <?php
-            } else {
+            } else if ($tableId == 3) {
           ?>
             <div class="add-button mt-3">
-            <form action="./addform.php?form=3" method="post">
+            <form action="./addentity.php?form=3&user=<?php echo $idAccRelated?>" method="post">
+              <button type="submit" class="btn btn-success" name="add-btn" id="add-btn">Tambah</button>
+            </form>
+            <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
+            </div>
+          <?php
+            } else if ($tableId == 4) {
+          ?>
+            <div class="add-button mt-3">
+            <form action="./addarticle.php" method="post">
+              <button type="submit" class="btn btn-success" name="add-btn" id="add-btn">Tambah</button>
+            </form>
+            <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
+            </div>
+          <?php
+            } else if ($tableId == 5) {
+          ?>
+            <div class="add-button mt-3">
+            <form action="./addarticle.php" method="post">
               <button type="submit" class="btn btn-success" name="add-btn" id="add-btn">Tambah</button>
             </form>
             <!-- <div id="display"><script type="text/javascript">document.write(capnum);</script></div> -->
@@ -364,10 +420,10 @@
             }
           ?>
           <?php
-          if (isset($_POST['add-btn'])) {
-              $_SESSION['emailRelated'] = $emailRelated;
-              header("Location: ./addform.php");
-            }
+          // if (isset($_POST['add-btn'])) {
+          //     $_SESSION['emailRelated'] = $emailRelated;
+          //     header("Location: ./addentity.php");
+          //   }
           ?>
           <!-- CRUD FORM (DISABLED) --> 
           <div class="form-add mt-3" style="display: none;" id="crud-form">
@@ -438,40 +494,143 @@
           if (isset($_POST['change-btn'])) {
             $changeId = $_POST['data-id'];
             $_SESSION['changeId'] = $changeId;
-            header("Location: ./changeform.php?form=1");
+            header("Location: ./changeentity.php?form=1");
             // header("Location: ./dashboard.php?table=1");
             // echo "$formType";
           } else if (isset($_POST['change-btn2'])) {
             $changeId = $_POST['data-id2'];
             $_SESSION['changeId'] = $changeId;
-            header("Location: ./changeform.php?form=2");
+            header("Location: ./changeentity.php?form=2");
           }
           else if (isset($_POST['change-btn3'])) {
             $changeId = $_POST['data-id3'];
             $_SESSION['changeId'] = $changeId;
-            header("Location: ./changeform.php?form=3");
+            header("Location: ./changeentity.php?form=3");
               // echo "$formType";
           }
           if (isset($_POST['delete-btn'])) {
             $deleteId = $_POST['data-id'];
             $delete_query = mysqli_query($db_conn, "DELETE FROM `tb_pengeluaran` WHERE id_pengeluaran = $deleteId");
             if ($delete_query) {
+              echo "<script>alert(\"Data dihapus!\");</script>";
               header("Location: ./dashboard.php?table=1");
             }
           } else if (isset($_POST['delete-btn2'])) {
             $deleteId = $_POST['data-id2'];
             $delete_query = mysqli_query($db_conn, "DELETE FROM `tb_pengeluaran` WHERE id_pengeluaran = $deleteId");
             if ($delete_query) {
+              echo "<script>alert(\"Data dihapus!\");</script>";
               header("Location: ./dashboard.php?table=2");              
             }
           } else if (isset($_POST['delete-btn3'])) {
             $deleteId = $_POST['data-id3'];
             $delete_query = mysqli_query($db_conn, "DELETE FROM `tb_produksi` WHERE id_produksi = $deleteId");
             if ($delete_query) {
+              echo "<script>alert(\"Data dihapus!\");</script>";
               header("Location: ./dashboard.php?table=3");            
             }
           }
           ?>
+          <?php
+            if ($tableId == 4 & $accType == 1) {
+          ?>
+            <div class="crud-table" id="crud-table-bahan-baku">
+              <form action="./dashboard.php" method="POST">
+                <table class="table table-bordered mt-3">
+                  <thead>
+                      <tr>
+                      <th scope="col">No</th>
+                      <th scope="col">ID Artikel</th>
+                      <th scope="col">Judul</th>
+                      <th scope="col">Isi Artikel</th>
+                      <th scope="col">Harga Total</th>
+                      <th scope="col">Tanggal dan Waktu Input</th>
+                      <th scope="col">Ubah</th>
+                      <th scope="col">Hapus</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <?php
+                          $query = mysqli_query($db_conn, "SELECT * FROM tb_artikel;");
+                          $i = 0;
+                          while ($result = mysqli_fetch_row($query)) {
+                            $i++;
+                      ?>
+                            <tr>
+                            <th scope="row"><?php echo $i ?></th>
+                            <td><?php echo $result[0] ?></td>
+                            <td><?php echo $result[1] ?></td>
+                            <td><?php echo $result[2] ?></td>
+                            <td><?php echo $result[3] ?></td>
+                            <td><?php echo $result[4] ?></td>
+                            <form action="./dashboard.php" method="post">
+                              <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                              <td> <input type="submit" id="change-btn" name="change-btn" class="btn btn-warning" value="Ubah"></td>
+                            </form>
+                            <form action="./dashboard.php" method="post">
+                              <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                              <td> <input type="submit" id="delete-btn" name="delete-btn" class="btn btn-danger" value="Hapus"></td>
+                            </form>
+                            </tr>
+                      <?php } 
+                      ?>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+          <?php
+            } else if ($tableId == 5 & $accType == 1) {
+          ?>
+            <div class="crud-table" id="crud-table-bahan-baku">
+              <form action="./dashboard.php" method="POST">
+                <table class="table table-bordered mt-3">
+                  <thead>
+                      <tr>
+                      <th scope="col">No</th>
+                      <th scope="col">ID Artikel</th>
+                      <th scope="col">Judul</th>
+                      <th scope="col">Isi Artikel</th>
+                      <th scope="col">Harga Total</th>
+                      <th scope="col">Tanggal dan Waktu Input</th>
+                      <th scope="col">Ubah</th>
+                      <th scope="col">Hapus</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <?php
+                          $query = mysqli_query($db_conn, "SELECT b.id_pengeluaran, b.nama, b.jumlah, b.harga, b.waktu_input, a.nama_lengkap FROM tb_pengeluaran b, tb_akun a, tb_tipe_pengeluaran j WHERE b.fk_user = a.id_akun AND b.fk_pengeluaran = j.id_tipe AND j.nama_tipe = 'bahan baku';");
+                          $i = 0;
+                          while ($result = mysqli_fetch_row($query)) {
+                            $i++;
+                      ?>
+                            <tr>
+                            <th scope="row"><?php echo $i ?></th>
+                            <td><?php echo $result[0] ?></td>
+                            <td><?php echo $result[1] ?></td>
+                            <td><?php echo $result[2] ?></td>
+                            <td><?php echo $result[3] ?></td>
+                            <td><?php echo $result[4] ?></td>
+                            <td><?php echo $result[5] ?></td>
+                            <form action="./dashboard.php" method="post">
+                              <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                              <td> <input type="submit" id="change-btn" name="change-btn" class="btn btn-warning" value="Ubah"></td>
+                            </form>
+                            <form action="./dashboard.php" method="post">
+                              <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
+                              <td> <input type="submit" id="delete-btn" name="delete-btn" class="btn btn-danger" value="Hapus"></td>
+                            </form>
+                            </tr>
+                      <?php } 
+                      ?>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+          <?php
+            }
+          ?>
+
+
           <?php
             if ($tableId == 1) { # BAHAN BAKU
           ?>
@@ -480,21 +639,7 @@
                 <table class="table table-bordered mt-3">
                   <thead>
                     <?php
-                      if ($accType == 1) {
-                    ?>
-                      <tr>
-                      <th scope="col">No</th>
-                      <th scope="col">ID Bahan Baku</th>
-                      <th scope="col">Nama</th>
-                      <th scope="col">Jumlah</th>
-                      <th scope="col">Harga Total</th>
-                      <th scope="col">Tanggal dan Waktu Input</th>
-                      <th scope="col">Pemilik</th>
-                      <th scope="col">Ubah</th>
-                      <th scope="col">Hapus</th>
-                      </tr>
-                    <?php
-                      } else if ($accType == 2){
+                      if ($accType == 2 || $accType == 3){
                     ?>
                       <tr>
                       <th scope="col">No</th>
@@ -525,33 +670,7 @@
                   </thead>
                   <tbody>
                       <?php
-                      if ($accType == 1) {
-                          $query = mysqli_query($db_conn, "SELECT b.id_pengeluaran, b.nama, b.jumlah, b.harga, b.waktu_input, a.nama_lengkap FROM tb_pengeluaran b, tb_akun a, tb_tipe_pengeluaran j WHERE b.fk_user = a.id_akun AND b.fk_pengeluaran = j.id_tipe AND j.nama_tipe = 'bahan baku';");
-                          $i = 0;
-                          while ($result = mysqli_fetch_row($query)) {
-                            $i++;
-                      ?>
-                        <tr>
-                          <th scope="row"><?php echo $i ?></th>
-                          <td><?php echo $result[0] ?></td>
-                          <td><?php echo $result[1] ?></td>
-                          <td><?php echo $result[2] ?></td>
-                          <td><?php echo $result[3] ?></td>
-                          <td><?php echo $result[4] ?></td>
-                          <td><?php echo $result[5] ?></td>
-                          <form action="./dashboard.php" method="post">
-                            <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
-                            <td> <input type="submit" id="change-btn" name="change-btn" class="btn btn-warning" value="Ubah"></td>
-                          </form>
-                          <form action="./dashboard.php" method="post">
-                            <input type="hidden" name="data-id" value="<?php echo $result[0]; ?>">
-                            <td> <input type="submit" id="delete-btn" name="delete-btn" class="btn btn-danger" value="Hapus"></td>
-                          </form>
-                        <!-- <td><a href="dashboard.php?change=<?php echo $result[0]; ?>" type="button" class="btn btn-primary change-btn" name="change-btn">Ubah</a></td>
-                        <td><a href="dashboard.php?delete=<?php echo $result[0]; ?>" type="button" class="btn btn-danger delete-btn" name="delete-btn">Hapus</a></td> -->
-                        </tr>
-                      <?php } 
-                      } else if ($accType == 2) {
+                      if ($accType == 2) {
                         $query = mysqli_query($db_conn, "SELECT b.id_pengeluaran, b.nama, b.jumlah, b.harga, b.waktu_input FROM `tb_pengeluaran` b INNER JOIN `tb_akun` a ON b.fk_user = a.id_akun WHERE a.email = '$emailRelated' AND fk_pengeluaran = 1;");
                         $i = 0;
                         while ($result = mysqli_fetch_row($query)) {
@@ -613,21 +732,7 @@
                 <table class="table table-bordered mt-3">
                   <thead>
                     <?php
-                      if ($accType == 1) {
-                    ?>
-                      <tr>
-                      <th scope="col">No</th>
-                      <th scope="col">ID Entitas Operasional</th>
-                      <th scope="col">Nama</th>
-                      <th scope="col">Jumlah</th>
-                      <th scope="col">Harga Total</th>
-                      <th scope="col">Tanggal dan Waktu Input</th>
-                      <th scope="col">Pemilik</th>
-                      <th scope="col">Ubah</th>
-                      <th scope="col">Hapus</th>
-                      </tr>
-                    <?php
-                      } else if ($accType == 2){
+                      if ($accType == 2){
                     ?>
                       <tr>
                       <th scope="col">No</th>
@@ -658,33 +763,7 @@
                   </thead>
                   <tbody>
                       <?php
-                      if ($accType == 1) {
-                          $query = mysqli_query($db_conn, "SELECT b.id_pengeluaran, b.nama, b.jumlah, b.harga, b.waktu_input, a.nama_lengkap FROM tb_pengeluaran b, tb_akun a, tb_tipe_pengeluaran j WHERE b.fk_user = a.id_akun AND b.fk_pengeluaran = j.id_tipe AND j.nama_tipe = 'operasional';");
-                          $i = 0;
-                          while ($result = mysqli_fetch_row($query)) {
-                            $i++;
-                      ?>
-                        <tr>
-                          <th scope="row"><?php echo $i ?></th>
-                          <td><?php echo $result[0] ?></td>
-                          <td><?php echo $result[1] ?></td>
-                          <td><?php echo $result[2] ?></td>
-                          <td><?php echo $result[3] ?></td>
-                          <td><?php echo $result[4] ?></td>
-                          <td><?php echo $result[5] ?></td>
-                          <form action="./dashboard.php" method="post">
-                            <input type="hidden" name="data-id2" value="<?php echo $result[0]; ?>">
-                            <td> <input type="submit" id="change-btn2" name="change-btn2" class="btn btn-warning" value="Ubah"></td>
-                          </form>
-                          <form action="./dashboard.php" method="post">
-                            <input type="hidden" name="data-id2" value="<?php echo $result[0]; ?>">
-                            <td> <input type="submit" id="delete-btn2" name="delete-btn2" class="btn btn-danger" value="Hapus"></td>
-                          </form>
-                        <!-- <td><a href="dashboard.php?change=<?php echo $result[0]; ?>" type="button" class="btn btn-primary change-btn" name="change-btn">Ubah</a></td>
-                        <td><a href="dashboard.php?delete=<?php echo $result[0]; ?>" type="button" class="btn btn-danger delete-btn" name="delete-btn">Hapus</a></td> -->
-                        </tr>
-                      <?php } 
-                      } else if ($accType == 2) {
+                      if ($accType == 2) {
                         $query = mysqli_query($db_conn, "SELECT b.id_pengeluaran, b.nama, b.jumlah, b.harga, b.waktu_input FROM `tb_pengeluaran` b INNER JOIN `tb_akun` a ON b.fk_user = a.id_akun WHERE a.email = '$emailRelated' AND fk_pengeluaran = 2;");
                         $i = 0;
                         while ($result = mysqli_fetch_row($query)) {
@@ -914,7 +993,7 @@
 <?php
   if(isset($_POST['logout-btn'])) {
     session_destroy();
-    header("Location: ./login.php");
+    header("Location: ./homepage.php");
   }
   if(isset($_POST['viewacc-btn'])) {
     $_SESSION['emailRelated'] = $emailRelated;

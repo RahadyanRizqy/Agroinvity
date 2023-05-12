@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2023 at 08:10 AM
+-- Generation Time: May 02, 2023 at 06:19 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -73,20 +73,18 @@ CREATE TABLE `tb_pengeluaran` (
 --
 
 INSERT INTO `tb_pengeluaran` (`id_pengeluaran`, `nama`, `jumlah`, `harga`, `waktu_input`, `fk_user`, `fk_pengeluaran`) VALUES
-(1, 'biji kopi 1kg', 1, 25000, '2023-04-14 18:23:50.000000', 3, 1),
+(1, 'biji kopi 13kg', 13, 25500, '2023-04-14 18:23:50.000000', 3, 1),
 (2, 'pupuk phonska', 1, 50000, '2023-04-20 20:37:33.575623', 1, 1),
 (3, 'pupuk bagus', 2, 100000, '2023-04-20 20:37:33.575623', 1, 1),
 (4, 'antracol', 4, 55000, '2023-04-20 20:37:33.575623', 1, 1),
-(5, 'pestisida marshal', 1, 25000, '2023-04-27 15:49:17.000000', 3, 1),
-(6, 'moss', 2, 10000, '2023-04-26 15:49:28.000000', 3, 1),
+(5, 'pestisida marshal 25RR', 121, 25000, '2023-04-27 15:49:17.000000', 3, 1),
 (7, 'jamur booster 500g', 2, 60000, '2023-04-14 18:26:31.000000', 3, 1),
-(8, 'cccp', 1, 1, '2023-05-04 00:05:36.000000', 1, 2),
-(9, 'cccp', 1, 1, '2023-05-10 18:54:30.000000', 3, 2),
+(8, 'ssk', 12, 12, '2023-05-04 00:05:36.000000', 1, 2),
+(9, 'wajan', 1, 1, '2023-05-10 18:54:30.000000', 3, 2),
 (10, 'ccca', 1, 1, '2023-05-10 18:54:30.000000', 1, 2),
-(11, 'ccca', 1, 1, '2023-05-10 18:54:30.000000', 3, 2),
 (12, 'ccca', 1, 1, '2023-05-10 18:54:30.000000', 1, 2),
-(13, 'ccca', 1, 1, '2023-05-10 18:54:30.000000', 3, 2),
-(14, 'ccca', 1, 1, '2023-05-10 18:54:30.000000', 1, 2);
+(20, 'biji kopi', 25, 5, '2023-05-02 22:25:31.512536', 1, 1),
+(21, 'LPG', 2, 55, '2023-05-02 22:25:39.957208', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -112,7 +110,9 @@ CREATE TABLE `tb_produksi` (
 INSERT INTO `tb_produksi` (`id_produksi`, `nama_produksi`, `jumlah`, `waktu`, `produk_terjual`, `produk_tak_terjual`, `harga_jual`, `fk_user`) VALUES
 (1, 'tahu', 15, '2023-05-17 16:47:22', 15, 0, 25000, 1),
 (2, 'susu kedelai', 15, '2023-05-01 16:52:44', 10, 5, 10000, 3),
-(3, 'tempe', 20, '2023-05-01 16:54:49', 10, 10, 75000, 3);
+(4, 'ppk', 1, '2023-05-02 11:54:43', 1, 1, 1, 9),
+(5, 'bawang bombay coy coy', 2, '2023-05-02 12:25:30', 24, 15, 1, 1),
+(6, 's', 11, '2023-05-02 15:35:37', 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -206,13 +206,13 @@ ALTER TABLE `tb_akun`
 -- AUTO_INCREMENT for table `tb_pengeluaran`
 --
 ALTER TABLE `tb_pengeluaran`
-  MODIFY `id_pengeluaran` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_pengeluaran` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `tb_produksi`
 --
 ALTER TABLE `tb_produksi`
-  MODIFY `id_produksi` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_produksi` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tb_tipe_pengeluaran`

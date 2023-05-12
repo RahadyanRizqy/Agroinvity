@@ -66,7 +66,7 @@
                             $query = mysqli_query($db_conn, "SELECT id_pengeluaran, nama, jumlah, harga FROM tb_pengeluaran WHERE id_pengeluaran = $changeId;");
                             $result = mysqli_fetch_row($query);
                             ?>
-                    <form action="./changeform.php?form=1" method="post">
+                    <form action="./changeentity.php?form=1" method="post">
                     <div class="form-group">
                         <label for="stuffId" class="form-label">ID Bahan</label>
                         <input type="number" class="form-control" name="stuffId" value="<?php echo $changeId?>" disabled>
@@ -91,9 +91,8 @@
                     else if($formId == 2) {
                         $query = mysqli_query($db_conn, "SELECT id_pengeluaran, nama, jumlah, harga FROM tb_pengeluaran WHERE id_pengeluaran = $changeId;");
                         $result = mysqli_fetch_row($query);
-                        var_dump($result);
                 ?>
-                    <form action="./changeform.php?form=2" method="post">
+                    <form action="./changeentity.php?form=2" method="post">
                     <div class="form-group">
                         <label for="stuffId" class="form-label">ID Bahan</label>
                         <input type="number" class="form-control" name="stuffId" value="<?php echo $changeId?>" disabled>
@@ -118,7 +117,7 @@
                             $query = mysqli_query($db_conn, "SELECT id_produksi, nama_produksi, jumlah, produk_terjual, produk_tak_terjual, harga_jual FROM tb_produksi WHERE id_produksi = $changeId;");
                             $result = mysqli_fetch_row($query);
                 ?>
-                    <form action="./changeform.php?form=3" method="post">
+                    <form action="./changeentity.php?form=3" method="post">
                     <div class="form-group">
                         <label for="stuffId" class="form-label">ID Bahan</label>
                         <input type="number" class="form-control" name="stuffId" value="<?php echo $changeId?>" disabled>
@@ -150,8 +149,10 @@
                     } 
                 ?>
             </div>
+            <?php
+            ?>
             <div class="edit-form col-4 mt-2">
-                <form action="./changeform.php" method="post">
+                <form action="./changeentity.php" method="post">
                         <button type="submit" class="btn form-button btn-danger" name="cancel-btn">Batal</button>
                 </form
             </div>
@@ -159,23 +160,23 @@
     </div>
 </body>
 </html>
-<?php
-    if(isset($_POST['cancel-btn'])) {
-        header("Location: ./dashboard.php?table=1");
-    }
 
+<?php
     $formId = $_GET['form'];
     if(isset($_POST['change-btn'])) {
         if ($formId == 1) {
             $stuffNameInput = $_POST['stuffNameInput'];
             $stuffQty = $_POST['stuffQty'];
             $stuffPrice = $_POST['stuffPrice'];
-            mysqli_query($db_conn, "UPDATE `tb_produksi` SET `nama_produksi`='',`jumlah`='[value-3]', `produk_terjual`='[value-5]',`produk_tak_terjual`='[value-6]',`harga_jual`='[value-7]' WHERE id_produksi = $changeId");
-            header("Location: ./dashboard.php?table=1");
+            mysqli_query($db_conn, "UPDATE `tb_pengeluaran` SET `nama`='$stuffNameInput',`jumlah`='$stuffQty',`harga`='$stuffPrice' WHERE id_pengeluaran = $changeId;");
+            header("Location: ../view/dashboard.php?table=1");
         }
         else if ($formId == 2) {
-            mysqli_query($db_conn, "");
-            header("Location: ./dashboard.php?table=2");
+            $stuffNameInput = $_POST['stuffNameInput'];
+            $stuffQty = $_POST['stuffQty'];
+            $stuffPrice = $_POST['stuffPrice'];
+            mysqli_query($db_conn, "UPDATE `tb_pengeluaran` SET `nama`='$stuffNameInput',`jumlah`='$stuffQty',`harga`='$stuffPrice' WHERE id_pengeluaran = $changeId;");
+            header("Location: ../view/dashboard.php?table=2");
         }
         else if ($formId == 3) {
             $stuffNameInput = $_POST['stuffNameInput'];
@@ -184,7 +185,10 @@
             $stuffSold = $_POST['stuffSold'];
             $stuffUnsold = $_POST['stuffUnsold'];
             mysqli_query($db_conn, "UPDATE `tb_produksi` SET `nama_produksi`='$stuffNameInput',`jumlah`=$stuffQty, `produk_terjual`=$stuffSold,`produk_tak_terjual`=$stuffUnsold,`harga_jual`=$stuffPrice WHERE id_produksi = $changeId");
-            header("Location: ./dashboard.php?table=3");
+            header("Location: ../view/dashboard.php?table=3");
         }
+    }
+    if(isset($_POST['cancel-btn'])) {
+        header("Location: ../view/dashboard.php?table=1");
     }
 ?>
